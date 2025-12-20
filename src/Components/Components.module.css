@@ -1,0 +1,60 @@
+/* DropdownBTN Component */
+.dropdownBTN__container {
+    color: var(--neutral-0);
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.dropdownBTN {
+    color: var(--neutral-0);
+    padding-block: 0.25rem;
+    border: solid 0.1rem var(--neutral-400);
+    border-radius: 0.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dropdown__options {
+    display: none; 
+    margin-block-start: 0.5rem;
+    border-radius: 0.5rem;
+    background-color: var(--neutral-800);
+}
+
+.dropdown__options > *:not(:last-child) {
+    border-bottom: solid 0.1rem var(--neutral-500);
+}
+
+.dropdown__options:last-child {
+    border-bottom: solid 0.1rem transparent;
+}
+
+.option {
+    padding: 0.5rem;
+}
+
+.option label {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.option label input:checked + .custom__radio {
+    background-color: var(--neutral-900);
+    border: solid 0.32rem var(--blue-400);
+}
+
+input[name="difficulty"],
+input[name="mode"] {
+    display: none;
+}
+
+.custom__radio {
+    width: 1rem;
+    aspect-ratio: 1 / 1;
+    border: solid 0.1rem var(--neutral-0);
+    border-radius: 50%;
+}

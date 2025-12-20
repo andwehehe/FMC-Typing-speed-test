@@ -1,0 +1,83 @@
+/* Stats Field Container */
+.statsField {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+
+
+/* BEST SCORE PANEL */
+.best__scorePanel {
+    display: flex;
+    justify-content: space-between;
+    margin-block-end: 1rem;
+    width: 100%;
+}
+
+.best__score {
+    color: var(--neutral-0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.best__score span {
+    color: var(--neutral-500);
+    margin-inline: 0.5rem 0.1rem;
+}
+
+
+
+/* REAL-TIME STATS */
+.realTime__stats {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1.7rem;
+    width: 100%;
+}
+
+.stats__category {
+    color: var(--neutral-500);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.realTime__WPM {
+    font-size: 1.5rem;
+    font-weight: var(--fw-bold);
+    color: var(--neutral-0);
+}
+
+.realTime__accuracy {
+    font-size: 1.5rem;
+    font-weight: var(--fw-bold);
+    color: var(--red-500);
+}
+
+.realTime__timer {
+    font-size: 1.5rem;
+    font-weight: var(--fw-bold);
+    color: var(--yellow-400);
+}
+
+.realTime__stats hr {
+    height: 3rem;
+    border: none;
+    border-left: solid 0.15rem var(--neutral-800);
+}
+
+
+
+/* Game Settings */
+.game__settings {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 0.7rem;
+}
