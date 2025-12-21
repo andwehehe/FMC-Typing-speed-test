@@ -5,7 +5,7 @@ import DropdownBTN from '../../Components/DropdownBTN'
 
 function StatsField() {
 
-  const DIFFICULTY__DROPDOWN = [
+  const DIFFICULTY_DROPDOWN = [
     {
       name: "difficulty",
       value: "Easy"
@@ -20,7 +20,7 @@ function StatsField() {
     }
   ];
 
-  const GAME__MODE = [
+  const GAME_MODE = [
     {
       name: "mode",
       value: "Timed (60s)"
@@ -68,8 +68,8 @@ function StatsField() {
 
         {/* Game Settings */}
         <div className={styles.game__settings}>
-            <DropdownBTN content={DIFFICULTY__DROPDOWN}/>
-            <DropdownBTN  content={GAME__MODE}/>
+            <DropdownBTN content={DIFFICULTY_DROPDOWN}/>
+            <DropdownBTN content={GAME_MODE}/>
         </div>
 
     </section>
