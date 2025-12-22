@@ -5,52 +5,105 @@ import { useState, useEffect } from 'react';
 function TextField() {
   
     const { easy, medium, hard } = WORD_POOL;
-    const sample = hard[9].text
+    const sample = hard[9].text;
     const words = sample.split(" ");
     
-    let i = 0;
-    
-    const [ currentChar, setCurrentChar ] = useState(sample[i]);
-    const [ value, setValue ] = useState("");
+    const [ inputValue, setInputValue ] = useState("");
 
     function handleChange(e) {
-        setValue(e.target.value)
-        e.target.value = ""
+        if(e.target.value.length > sample.length) return;
+        setInputValue(e.target.value)
     }
 
+    let globalIndex = 0;
+
     useEffect(() => {
-      if(currentChar === value) {
-        console.log("same")
-      } else {
-        console.log("not same")
-      }
-      setCurrentChar(sample[i++])
-      console.log(i)
-    }, [value, currentChar, i, sample])
-
-
+        
+    }, [])
 
     return(
         <section className={styles.text__field}>
-            <input type="text" className={styles.input} onChange={handleChange} />
+            <input 
+                type="text" 
+                className={styles.input} 
+                onChange={handleChange} 
+                onPaste={e => e.preventDefault} 
+                autoFocus
+            />
             <div className={styles.text}>
                 {
+                    words.map((word, wordIndex) => (
+                        <div className={styles.word} key={wordIndex}>
+                            {
+                                word.split("").map((char, charIndex) => {
+                                    const currentCharIndex = globalIndex;
 
-                    words.map((word, wordIndex) => {
+                                    let className = "";
 
-                        return(
-                            <div className={styles.word} key={wordIndex}>
-                                {
-                                  word.split("").map((char, charIndex) => {
-                                      return <span key={`${wordIndex}-${charIndex}`} className={styles.char}>{char}</span>
-                                  })
-                                }
-                                <span key={`space-${wordIndex}`} className={styles.space}>&nbsp;</span>
-                            </div>
-                        )
+                                    if (currentCharIndex < inputValue.length) {
+                                        className =
+                                            char === inputValue[currentCharIndex]
+                                            ? "correct"
+                                            : "incorrect";
+                                    }
 
-                    })
+                                    // if (currentCharIndex+1 === inputValue.length) {
+                                    //     className += " active";
+                                    // }
 
+                                    globalIndex++;
+
+                                    return (
+                                        <span
+                                            key={`${wordIndex}-${charIndex}`}
+                                            className={styles[className]}
+                                        >
+                                            {className === "incorrect" ? inputValue[currentCharIndex] : char}
+                                        </span>
+                                    );
+                                })
+                            }
+
+                            {/* SPACE */}
+                            {
+                                (() => {
+                                    const spaceIndex = globalIndex;
+                                    let spaceClass = "";
+
+                                    if (spaceIndex < inputValue.length) {
+                                    spaceClass =
+                                        inputValue[spaceIndex] === " "
+                                        ? "correct"
+                                        : "incorrect";
+                                    }
+
+                                    if (spaceIndex === inputValue.length) {
+                                    spaceClass += " active";
+                                    }
+
+                                    globalIndex++;
+
+                                    return (
+
+                                    spaceClass === "incorrect" 
+                                        ? <span
+                                            key={`space-${wordIndex}`}
+                                            className={`${styles.space} ${styles[spaceClass]}`}
+                                        >
+                                            {inputValue[spaceIndex]}
+                                        </span>
+                                        : <span
+                                            key={`space-${wordIndex}`}
+                                            className={`${styles.space} ${styles[spaceClass]}`}
+                                        >
+                                            &nbsp;
+                                        </span>
+                                    
+                                    );
+                                }) ()
+                            }
+                        </div>
+                    ))
                 }
             </div>
         </section>

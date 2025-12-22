@@ -20,5 +20,22 @@
 }
 
 .input {
-    background-color: var(--neutral-0);
+    /* position: absolute;
+    background-color: transparent;
+    color: transparent; */
+    background-color: white;
+}
+
+.active {
+    color: var(--green-500);
+    background-color: gray;
+}
+
+.correct {
+    color: var(--green-500);
+}
+
+.incorrect {
+    color: var(--red-500);
+    text-decoration: underline;
 }
