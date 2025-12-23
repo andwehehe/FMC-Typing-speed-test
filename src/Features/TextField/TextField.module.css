@@ -26,9 +26,10 @@
     background-color: white;
 }
 
-.active {
-    color: var(--green-500);
-    background-color: gray;
+.fakeCursor {
+    background-color: var(--neutral-400);
+    border-radius: 0.2rem;
+    padding: 0.1rem;
 }
 
 .correct {
@@ -37,5 +38,10 @@
 
 .incorrect {
     color: var(--red-500);
+    text-decoration: underline;
+}
+
+.error {
+    color: rgb(81, 3, 18);
     text-decoration: underline;
 }

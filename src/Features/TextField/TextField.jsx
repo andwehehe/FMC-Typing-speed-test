@@ -34,11 +34,13 @@ function TextField() {
                 {
                     words.map((word, wordIndex) => (
                         <div className={styles.word} key={wordIndex}>
+                            {/* SPLITTING WORDS INTO CHARS */}
                             {
                                 word.split("").map((char, charIndex) => {
                                     const currentCharIndex = globalIndex;
 
                                     let className = "";
+                                    let fakeCursor = ""
 
                                     if (currentCharIndex < inputValue.length) {
                                         className =
@@ -47,21 +49,44 @@ function TextField() {
                                             : "incorrect";
                                     }
 
-                                    // if (currentCharIndex+1 === inputValue.length) {
-                                    //     className += " active";
-                                    // }
+                                    if (currentCharIndex === inputValue.length) {
+                                        fakeCursor = "fakeCursor";
+                                    }
 
                                     globalIndex++;
 
-                                    return (
+                                    return(
                                         <span
                                             key={`${wordIndex}-${charIndex}`}
-                                            className={styles[className]}
+                                            className={`${styles[className]} ${styles[fakeCursor]}`}
                                         >
-                                            {className === "incorrect" ? inputValue[currentCharIndex] : char}
+                                            {char}
                                         </span>
                                     );
                                 })
+                            }
+
+                            {/* EXCESS ERRROR */}
+                            {
+                                (() => {
+                                    const errors = []
+
+                                    while(inputValue.length > globalIndex && inputValue[globalIndex] !== " ") {
+                                        let errorClass = "error";
+                                        let errorIndex = globalIndex;
+                                        globalIndex++
+                                        errors.push(
+                                            <span
+                                                key={`error-${errorClass}`}
+                                                className={styles[errorClass]}
+                                            >
+                                                {inputValue[errorIndex]}
+                                            </span>
+                                        );
+                                    }
+
+                                    return(errors)
+                                }) ()
                             }
 
                             {/* SPACE */}
@@ -69,6 +94,7 @@ function TextField() {
                                 (() => {
                                     const spaceIndex = globalIndex;
                                     let spaceClass = "";
+                                    let fakeCursor = ""
 
                                     if (spaceIndex < inputValue.length) {
                                     spaceClass =
@@ -78,27 +104,18 @@ function TextField() {
                                     }
 
                                     if (spaceIndex === inputValue.length) {
-                                    spaceClass += " active";
+                                        fakeCursor = "fakeCursor";
                                     }
 
                                     globalIndex++;
 
-                                    return (
-
-                                    spaceClass === "incorrect" 
-                                        ? <span
+                                    return(
+                                        <span
                                             key={`space-${wordIndex}`}
-                                            className={`${styles.space} ${styles[spaceClass]}`}
-                                        >
-                                            {inputValue[spaceIndex]}
-                                        </span>
-                                        : <span
-                                            key={`space-${wordIndex}`}
-                                            className={`${styles.space} ${styles[spaceClass]}`}
+                                            className={[styles[fakeCursor], styles[spaceClass]].filter(Boolean).join(" ")}
                                         >
                                             &nbsp;
                                         </span>
-                                    
                                     );
                                 }) ()
                             }
