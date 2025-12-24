@@ -1,25 +1,33 @@
 import styles from './TextField.module.css'
 import WORD_POOL from './data.json'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 function TextField() {
   
     const { easy, medium, hard } = WORD_POOL;
     const sample = hard[9].text;
     const words = sample.split(" ");
-    
+    let globalIndex = 0;
+
+    const [ hasIncorrect, setHasIncorrect ] = useState(false);
     const [ inputValue, setInputValue ] = useState("");
 
     function handleChange(e) {
         if(e.target.value.length > sample.length) return;
-        setInputValue(e.target.value)
+        const newValue = e.target.value;
+        setInputValue(newValue);
+
+        const foundIncorrect = [...newValue].some((char, index) => {
+            return char !== sample[index]
+        })
+        setHasIncorrect(foundIncorrect);
     }
 
-    let globalIndex = 0;
-
-    useEffect(() => {
-        
-    }, [])
+    function handleBackspace(e) {
+        if(e.key === "Backspace" && !hasIncorrect) {
+            e.preventDefault();
+        }
+    }
 
     return(
         <section className={styles.text__field}>
@@ -27,7 +35,8 @@ function TextField() {
                 type="text" 
                 className={styles.input} 
                 onChange={handleChange} 
-                onPaste={e => e.preventDefault} 
+                onKeyDown={handleBackspace}
+                onPaste={e => e.preventDefault()} 
                 autoFocus
             />
             <div className={styles.text}>
@@ -49,7 +58,7 @@ function TextField() {
                                             : "incorrect";
                                     }
 
-                                    if (currentCharIndex === inputValue.length) {
+                                    if (currentCharIndex === inputValue.length && currentCharIndex !== 0) {
                                         fakeCursor = "fakeCursor";
                                     }
 
@@ -77,7 +86,7 @@ function TextField() {
                                         globalIndex++
                                         errors.push(
                                             <span
-                                                key={`error-${errorClass}`}
+                                                key={`error-${errorIndex}`}
                                                 className={styles[errorClass]}
                                             >
                                                 {inputValue[errorIndex]}

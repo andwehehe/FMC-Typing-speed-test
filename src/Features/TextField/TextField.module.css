@@ -15,7 +15,7 @@
     display: flex;
     flex-wrap: wrap;
     font-size: 2rem;
-    color: var(--neutral-500);
+    color: var(--neutral-400);
     height: 85%;
 }
 
@@ -27,9 +27,8 @@
 }
 
 .fakeCursor {
-    background-color: var(--neutral-400);
+    background-color: var(--neutral-300);
     border-radius: 0.2rem;
-    padding: 0.1rem;
 }
 
 .correct {
