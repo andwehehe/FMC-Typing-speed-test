@@ -62,7 +62,7 @@ function StatsField() {
 
             <div className={styles.stats__category}>
                 Time:
-                <span className={styles.realTime__timer}>0:46</span>
+                <span className={styles.realTime__timer}>0:00</span>
             </div>
         </div>
 

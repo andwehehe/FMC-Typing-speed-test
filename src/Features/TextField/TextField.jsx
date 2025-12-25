@@ -1,6 +1,6 @@
 import styles from './TextField.module.css'
 import WORD_POOL from './data.json'
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 function TextField() {
   
@@ -8,9 +8,12 @@ function TextField() {
     const sample = hard[9].text;
     const words = sample.split(" ");
     let globalIndex = 0;
+    const timerRef = useRef(null);
 
     const [ hasIncorrect, setHasIncorrect ] = useState(false);
     const [ inputValue, setInputValue ] = useState("");
+    const [ isTimerRunning, setIsTimerRunning ] = useState(false);
+    const [ timeLeft, setTimeLeft ] = useState(5);
 
     function handleChange(e) {
         if(e.target.value.length > sample.length) return;
@@ -23,11 +26,43 @@ function TextField() {
         setHasIncorrect(foundIncorrect);
     }
 
-    function handleBackspace(e) {
+    function handleKeyDown(e) {
         if(e.key === "Backspace" && !hasIncorrect) {
             e.preventDefault();
+        } 
+        
+        if(!isTimerRunning && inputValue.length === 0) {
+            if (
+                e.key === "Shift" || 
+                e.key === "Control" || 
+                e.key === "Alt" || 
+                e.key === "Meta" ||
+                e.key === "CapsLock" ||
+                e.key === "Tab" ||
+                e.key === "Escape"
+            ) {
+                return;
+            }
+
+            setIsTimerRunning(true);
+            timerRef.current = setInterval(() => {
+                setTimeLeft(prev => {
+                    console.log(prev);
+                    if(prev <= 1) {
+                        clearInterval(timerRef.current);
+                        setIsTimerRunning(false);
+                        setInputValue("");
+                        return 60;
+                    }
+                    return prev - 1;
+                })
+            }, 1000)
         }
     }
+
+    useEffect(() => {
+        return () => clearInterval(timerRef.current)
+    }, [])
 
     return(
         <section className={styles.text__field}>
@@ -35,9 +70,11 @@ function TextField() {
                 type="text" 
                 className={styles.input} 
                 onChange={handleChange} 
-                onKeyDown={handleBackspace}
+                onKeyDown={handleKeyDown}
                 onPaste={e => e.preventDefault()} 
+                value={inputValue}
                 autoFocus
+                disabled={timeLeft === 0}
             />
             <div className={styles.text}>
                 {
