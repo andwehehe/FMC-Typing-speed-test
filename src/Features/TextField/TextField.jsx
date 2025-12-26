@@ -1,6 +1,7 @@
 import styles from './TextField.module.css'
 import WORD_POOL from './data.json'
-import { useState, useRef, useEffect } from 'react';
+import { useState, useContext, useEffect } from 'react';
+import { TimerContext } from './TimerContext';
 
 function TextField() {
   
@@ -8,12 +9,10 @@ function TextField() {
     const sample = hard[9].text;
     const words = sample.split(" ");
     let globalIndex = 0;
-    const timerRef = useRef(null);
-
+    
+    const { startTimer, isTimerRunning, timeLeft } = useContext(TimerContext);
     const [ hasIncorrect, setHasIncorrect ] = useState(false);
     const [ inputValue, setInputValue ] = useState("");
-    const [ isTimerRunning, setIsTimerRunning ] = useState(false);
-    const [ timeLeft, setTimeLeft ] = useState(5);
 
     function handleChange(e) {
         if(e.target.value.length > sample.length) return;
@@ -43,26 +42,17 @@ function TextField() {
             ) {
                 return;
             }
-
-            setIsTimerRunning(true);
-            timerRef.current = setInterval(() => {
-                setTimeLeft(prev => {
-                    console.log(prev);
-                    if(prev <= 1) {
-                        clearInterval(timerRef.current);
-                        setIsTimerRunning(false);
-                        setInputValue("");
-                        return 60;
-                    }
-                    return prev - 1;
-                })
-            }, 1000)
+            startTimer();
         }
     }
 
     useEffect(() => {
-        return () => clearInterval(timerRef.current)
-    }, [])
+        if(timeLeft <= 1) {
+            setTimeout(() => {
+                setInputValue("")
+            }, 1000)
+        }
+    }, [timeLeft])
 
     return(
         <section className={styles.text__field}>
@@ -73,8 +63,8 @@ function TextField() {
                 onKeyDown={handleKeyDown}
                 onPaste={e => e.preventDefault()} 
                 value={inputValue}
+                disabled={timeLeft <= 1}
                 autoFocus
-                disabled={timeLeft === 0}
             />
             <div className={styles.text}>
                 {

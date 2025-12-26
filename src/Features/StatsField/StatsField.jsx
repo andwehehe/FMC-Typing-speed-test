@@ -2,8 +2,12 @@ import styles from './StatsField.module.css'
 import logoMobile from '../../assets/icons/logo-small.svg'
 import trophy from '../../assets/icons/icon-personal-best.svg'
 import DropdownBTN from '../../Components/DropdownBTN'
+import { useContext } from 'react'
+import { TimerContext } from '../TextField/TimerContext'
 
 function StatsField() {
+
+  const {timeLeft } = useContext(TimerContext);
 
   const DIFFICULTY_DROPDOWN = [
     {
@@ -62,7 +66,9 @@ function StatsField() {
 
             <div className={styles.stats__category}>
                 Time:
-                <span className={styles.realTime__timer}>0:00</span>
+                <span className={styles.realTime__timer}>
+                  {timeLeft === 60 ? 1 : 0}:{timeLeft < 10 && 0}{timeLeft < 60 ? timeLeft : "00"}
+                </span>
             </div>
         </div>
 
