@@ -1,27 +1,49 @@
 import styles from './TextField.module.css'
 import WORD_POOL from './data.json'
 import { useState, useContext, useEffect } from 'react';
-import { TimerContext } from './TimerContext';
+import { StatsContext } from './StatsContext';
 import { DifficultyContext } from '../../Components/DifficultyContext';
 
 function TextField() {
   
     const { easy, medium, hard } = WORD_POOL;
-    const { startTimer, isTimerRunning, timeLeft } = useContext(TimerContext);
     const { selectedDifficulty } = useContext(DifficultyContext);
-    const [ hasIncorrect, setHasIncorrect ] = useState(false);
-    const [ inputValue, setInputValue ] = useState("");
     const [ RANDOM_LEVEL ] = useState(() => Math.floor(Math.random() * getDifficulty().length));
     const sample = getDifficulty()[RANDOM_LEVEL].text;
-    const words = sample.split(" ");
 
+    const { 
+        startTimer, 
+        isTimerRunning, 
+        timeLeft, 
+        setTotalTypedChars, 
+        setTotalCorrectChars, 
+        setTotalIncorrectChars 
+    } = useContext(StatsContext);
+
+    const [ hasIncorrect, setHasIncorrect ] = useState(false);
+    const [ inputValue, setInputValue ] = useState("");
+    const words = sample.split(" ");
     let globalIndex = 0;
+
+    let correctCharsCounter = 0;
+    let incorrectCharsCounter = 0
 
     function handleChange(e) {
         if(e.target.value.length > sample.length) return;
         
         const newValue = e.target.value;
         setInputValue(newValue);
+        setTotalTypedChars(prev => prev + 1);
+        
+        [...newValue].forEach((char, index) => {
+            if(char === sample[index]) {
+                correctCharsCounter++;
+            } else {
+                incorrectCharsCounter++;
+            }
+        })
+        setTotalCorrectChars(correctCharsCounter);
+        setTotalIncorrectChars(incorrectCharsCounter);
 
         const foundIncorrect = [...newValue].some((char, index) => {
             return char !== sample[index]

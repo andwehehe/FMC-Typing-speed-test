@@ -1,13 +1,13 @@
 import Dashboard from "./Pages/Dashboard/Dashboard"
-import TimerContextProvider from "./Features/TextField/TimerContext"
+import StatsContextProvider from "./Features/TextField/StatsContext"
 
  function App() {
 
   return(
     <>
-      <TimerContextProvider>
+      <StatsContextProvider>
           <Dashboard />
-      </TimerContextProvider>
+      </StatsContextProvider>
     </>
   )
  }

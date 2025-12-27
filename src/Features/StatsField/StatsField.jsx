@@ -3,11 +3,12 @@ import logoMobile from '../../assets/icons/logo-small.svg'
 import trophy from '../../assets/icons/icon-personal-best.svg'
 import DropdownBTN from '../../Components/DropdownBTN'
 import { useContext } from 'react'
-import { TimerContext } from '../TextField/TimerContext'
+import { StatsContext } from '../TextField/StatsContext'
 
 function StatsField() {
 
-  const {timeLeft } = useContext(TimerContext);
+  const { timeLeft } = useContext(StatsContext);
+  const { getAccuracy, getWPM } = useContext(StatsContext)
 
   const DIFFICULTY_DROPDOWN = [
     {
@@ -52,14 +53,14 @@ function StatsField() {
         <div className={styles.realTime__stats}>
             <div className={styles.stats__category}>
                 WPM:
-                <span className={styles.realTime__WPM}>40</span>
+                <span className={styles.realTime__WPM}>{Math.floor(getWPM())}</span>
             </div>
 
             <hr />
 
             <div className={styles.stats__category}>
                 Accuracy:
-                <span className={styles.realTime__accuracy}>94%</span>
+                <span className={styles.realTime__accuracy}>{getAccuracy() ? getAccuracy().toFixed(0) : 100}%</span>
             </div>
 
             <hr />

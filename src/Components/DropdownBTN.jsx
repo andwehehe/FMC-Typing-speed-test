@@ -1,7 +1,7 @@
 import styles from './Components.module.css'
 import downArrow from '../assets/icons/icon-down-arrow.svg'
 import { DifficultyContext } from './DifficultyContext';
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 
 function DropdownBTN({ content }) {
 
