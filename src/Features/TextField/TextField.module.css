@@ -20,10 +20,10 @@
 }
 
 .input {
-    /* position: absolute;
+    position: absolute;
     background-color: transparent;
-    color: transparent; */
-    background-color: white;
+    color: transparent;
+    /* background-color: white; */
 }
 
 .fakeCursor {

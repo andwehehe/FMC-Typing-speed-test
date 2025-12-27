@@ -1,16 +1,29 @@
 import styles from './Components.module.css'
 import downArrow from '../assets/icons/icon-down-arrow.svg'
-import { useState } from 'react';
+import { DifficultyContext } from './DifficultyContext';
+import { useState, useContext, useEffect } from 'react';
 
 function DropdownBTN({ content }) {
 
-    const [ selectedDifficulty, setSelectedDifficulty ] = useState(content[0].value);
+    const { selectedDifficulty, setSelectedDifficulty } = useContext(DifficultyContext);
+    const [ selectedRadio, setSelectedRadio ] = useState(content[0].value);
     const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
 
-    const selectDifficulty = (e) => {
-        setSelectedDifficulty(e.target.value)
-        setIsDropdownOpen(prev => !prev)
+    const selectRadio = (e) => {
+        setSelectedRadio(e.target.value);
+        
+        if(content[0].name === "difficulty") {
+            setSelectedDifficulty(e.target.value);
+        }
+
+        setIsDropdownOpen(prev => !prev);
     }
+
+    // useEffect(() => {
+    //     if(content[0].name === "difficulty" && selectedDifficulty) {
+    //         setSelectedRadio(selectedDifficulty);
+    //     }
+    // }, [])
 
     return(
         <div className={styles.dropdownBTN__container}>
@@ -19,7 +32,7 @@ function DropdownBTN({ content }) {
                 className={styles.dropdownBTN} 
                 onClick={() => setIsDropdownOpen(prev => !prev)}
             >
-                {selectedDifficulty}
+                {selectedRadio}
                 <img src={downArrow} alt="arrow down" />
             </button>
 
@@ -36,8 +49,8 @@ function DropdownBTN({ content }) {
                                         type="radio" 
                                         name={name}
                                         value={value}
-                                        onChange={selectDifficulty}
-                                        checked={selectedDifficulty === value}
+                                        onChange={selectRadio}
+                                        checked={selectedRadio === value}
                                     />
                                     <div className={styles.custom__radio}></div>
                                     {value}

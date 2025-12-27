@@ -2,20 +2,24 @@ import styles from './TextField.module.css'
 import WORD_POOL from './data.json'
 import { useState, useContext, useEffect } from 'react';
 import { TimerContext } from './TimerContext';
+import { DifficultyContext } from '../../Components/DifficultyContext';
 
 function TextField() {
   
     const { easy, medium, hard } = WORD_POOL;
-    const sample = hard[9].text;
-    const words = sample.split(" ");
-    let globalIndex = 0;
-    
     const { startTimer, isTimerRunning, timeLeft } = useContext(TimerContext);
+    const { selectedDifficulty } = useContext(DifficultyContext);
     const [ hasIncorrect, setHasIncorrect ] = useState(false);
     const [ inputValue, setInputValue ] = useState("");
+    const [ RANDOM_LEVEL ] = useState(() => Math.floor(Math.random() * getDifficulty().length));
+    const sample = getDifficulty()[RANDOM_LEVEL].text;
+    const words = sample.split(" ");
+
+    let globalIndex = 0;
 
     function handleChange(e) {
         if(e.target.value.length > sample.length) return;
+        
         const newValue = e.target.value;
         setInputValue(newValue);
 
@@ -43,6 +47,17 @@ function TextField() {
                 return;
             }
             startTimer();
+        }
+    }
+
+    function getDifficulty() {
+        switch(selectedDifficulty) {
+            case "Easy": 
+                return easy;
+            case "Medium":
+                return medium;
+            case "Hard": 
+                return hard;
         }
     }
 
