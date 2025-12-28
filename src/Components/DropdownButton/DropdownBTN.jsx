@@ -1,11 +1,11 @@
-import styles from './Components.module.css'
-import downArrow from '../assets/icons/icon-down-arrow.svg'
-import { DifficultyContext } from './DifficultyContext';
+import styles from './DropdownBTN.module.css'
+import downArrow from '../../assets/icons/icon-down-arrow.svg'
+import { DifficultyContext } from '../../Features/StatsField/DifficultyContext';
 import { useState, useContext } from 'react';
 
 function DropdownBTN({ content }) {
 
-    const { selectedDifficulty, setSelectedDifficulty } = useContext(DifficultyContext);
+    const { setSelectedDifficulty } = useContext(DifficultyContext);
     const [ selectedRadio, setSelectedRadio ] = useState(content[0].value);
     const [ isDropdownOpen, setIsDropdownOpen ] = useState(false);
 

@@ -34,6 +34,7 @@ function StatsContextProvider({ children }) {
 
 
     // Accuracy & WPM
+    const [ resetFlag, setResetFlag ] = useState(false);
     const [ totalTypedChars, setTotalTypedChars ] = useState(0);
     const [ totalCorrectChars, setTotalCorrectChars ] = useState(0);
     const [ totalIncorrectChars, setTotalIncorrectChars ] = useState(0);
@@ -52,6 +53,16 @@ function StatsContextProvider({ children }) {
         
         return Math.max(0, Math.round(wpm));
     };
+
+    function resetTest() {
+        clearInterval(timerRef.current);
+        setIsTimerRunning(false);
+        setTimeLeft(60);
+        setTotalCorrectChars(0);
+        setTotalTypedChars(0);
+        setTotalIncorrectChars(0);
+        setResetFlag(true);
+    }
     // Accuracy & WPM
 
 
@@ -64,11 +75,14 @@ function StatsContextProvider({ children }) {
                 isTimerRunning, 
                 setIsTimerRunning, 
                 startTimer,
+                resetTest,
                 setTotalTypedChars,
                 setTotalCorrectChars,
                 setTotalIncorrectChars,
                 getAccuracy,
-                getWPM
+                getWPM,
+                setResetFlag,
+                resetFlag
             }}
         >
             {children}

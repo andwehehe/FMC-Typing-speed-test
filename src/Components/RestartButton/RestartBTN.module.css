@@ -1,0 +1,16 @@
+.restartBTN {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.restartBTN button {
+    cursor: pointer;
+    color: var(--neutral-0);
+    font-weight: var(--fw-semibold);
+    display: flex;
+    gap: 0.5rem;
+    padding: 0.7rem;
+    border-radius: 0.5rem;
+    background-color: var(--neutral-800);
+}

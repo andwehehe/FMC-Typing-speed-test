@@ -1,7 +1,7 @@
 import styles from './StatsField.module.css'
 import logoMobile from '../../assets/icons/logo-small.svg'
 import trophy from '../../assets/icons/icon-personal-best.svg'
-import DropdownBTN from '../../Components/DropdownBTN'
+import DropdownBTN from '../../Components/DropdownButton/DropdownBTN'
 import { useContext } from 'react'
 import { StatsContext } from '../TextField/StatsContext'
 

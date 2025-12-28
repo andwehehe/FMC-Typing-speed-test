@@ -1,7 +1,8 @@
 import styles from './Dashboard.module.css'
 import StatsField from '../../Features/StatsField/StatsField';
 import TextField from '../../Features/TextField/TextField';
-import DifficultyContextProvider from '../../Components/DifficultyContext';
+import DifficultyContextProvider from '../../Features/StatsField/DifficultyContext';
+import RestarBTN from '../../Components/RestartButton/RestartBTN';
 
 function Dashboard() {
 
@@ -10,6 +11,7 @@ function Dashboard() {
       <DifficultyContextProvider>
           <StatsField />
           <TextField />
+          <RestarBTN />
       </DifficultyContextProvider>
     </div>
   );
