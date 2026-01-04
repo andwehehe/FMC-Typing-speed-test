@@ -4,7 +4,8 @@ import './global-styles/variables.css'
 import './global-styles/global.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App.jsx'
-import ErrorPage from './Pages/ErrorPage/ErrorPage.jsx'
+import ErrorPage from './Pages/ErrorPage/ErrorPage.jsx';
+import StatsContextProvider from './Features/TextField/StatsContext.jsx'
 
 const router = createBrowserRouter([
   {
@@ -20,6 +21,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <StatsContextProvider>
+      <RouterProvider router={router} />
+    </StatsContextProvider>
   </StrictMode>,
 )

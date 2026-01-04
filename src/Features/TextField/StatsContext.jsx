@@ -1,4 +1,4 @@
-import { useState, createContext, useRef, useEffect } from "react";
+import { useState, createContext, useRef, useEffect, useCallback } from "react";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const StatsContext = createContext()
@@ -19,7 +19,7 @@ function StatsContextProvider({ children }) {
                 if(prev <= 1) {
                     clearInterval(timerRef.current);
                     setIsTimerRunning(false);
-                    return 60;
+                    return 0;
                 }
                 return prev - 1;
             })
@@ -54,7 +54,7 @@ function StatsContextProvider({ children }) {
         return Math.max(0, Math.round(wpm));
     };
 
-    function resetTest() {
+    const resetTest = useCallback(() => {
         clearInterval(timerRef.current);
         setIsTimerRunning(false);
         setTimeLeft(60);
@@ -62,10 +62,22 @@ function StatsContextProvider({ children }) {
         setTotalTypedChars(0);
         setTotalIncorrectChars(0);
         setResetFlag(true);
-    }
+    }, [])
     // Accuracy & WPM
 
 
+
+    // Best Score
+    const [ bestScore, setBestScore ] = useState(Number(localStorage.getItem("highScore")) || 0);
+    
+    function setNewBestScore() {
+        const newScore = getWPM() * (getAccuracy() / 100);
+        setBestScore(Math.max(newScore, bestScore));
+        document.documentElement.dataset.highScore = bestScore;
+        localStorage.setItem("highScore", Math.max(newScore, bestScore.toString()))
+    }
+    // Best Score
+    
 
     return(
         <StatsContext.Provider 
@@ -77,10 +89,13 @@ function StatsContextProvider({ children }) {
                 startTimer,
                 resetTest,
                 setTotalTypedChars,
+                totalCorrectChars,
                 setTotalCorrectChars,
                 setTotalIncorrectChars,
                 getAccuracy,
                 getWPM,
+                setNewBestScore,
+                bestScore,
                 setResetFlag,
                 resetFlag
             }}

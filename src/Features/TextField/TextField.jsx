@@ -8,18 +8,23 @@ function TextField() {
   
     const { easy, medium, hard } = WORD_POOL;
     const { getDifficulty } = useContext(DifficultyContext);
-    const [ RANDOM_LEVEL ] = useState(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
-    const sample = getDifficulty(easy, medium, hard)[RANDOM_LEVEL].text;
+    const [ randomLevel, setRandomLevel ] = useState(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
+    const sample = getDifficulty(easy, medium, hard)[randomLevel].text;
 
+    // Stats Contexts
     const { 
         startTimer, 
         isTimerRunning, 
         timeLeft, 
+        resetTest,
         setTotalTypedChars, 
+        totalCorrectChars,
         setTotalCorrectChars, 
         setTotalIncorrectChars,
         resetFlag, 
-        setResetFlag
+        setResetFlag,
+        bestScore,
+        setNewBestScore
     } = useContext(StatsContext);
 
     const inputRef = useRef();
@@ -123,18 +128,28 @@ function TextField() {
         setInputValue("");
         setHasIncorrect(false);
         setResetFlag(false);
-    }, [resetFlag, setResetFlag])
+        setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length))
+    }, [resetFlag, setResetFlag, easy, medium, hard, getDifficulty])
 
     // Reset input when difficulty is changed
     useEffect(() => {
         setInputValue("");
         setHasIncorrect(false);
-    }, [getDifficulty])
+        resetTest()
+    }, [getDifficulty, resetTest])
 
-    // Autofocus to input
+    // Autofocus to input after mount
     useEffect(() => {
         inputRef.current.focus();
     }, [])
+
+    // Update best score after timer drops to zero or if the test is done
+    useEffect(() => {
+        if(timeLeft <= 0 || totalCorrectChars === sample.length) {
+            setNewBestScore()
+            resetTest()
+        }
+    }, [timeLeft, setNewBestScore, bestScore, totalCorrectChars, sample, resetTest])
 
     return(
         <section className={styles.text__field}>

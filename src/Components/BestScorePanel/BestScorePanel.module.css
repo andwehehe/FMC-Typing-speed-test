@@ -1,0 +1,19 @@
+/* BEST SCORE PANEL */
+.best__scorePanel {
+    display: flex;
+    justify-content: space-between;
+    margin-block-end: 1rem;
+    width: 100%;
+}
+
+.best__score {
+    color: var(--neutral-0);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.best__score span {
+    color: var(--neutral-500);
+    margin-inline: 0.5rem 0.1rem;
+}
