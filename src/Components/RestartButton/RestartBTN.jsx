@@ -1,5 +1,5 @@
 import styles from './RestartBTN.module.css'
-import restartIcon from '/src/assets/icons/icon-restart.svg'
+import restartIcon from '/src/assets/icons/icon-restart-white.svg'
 import { useContext } from 'react'
 import { StatsContext } from '../../Features/TextField/StatsContext'
 

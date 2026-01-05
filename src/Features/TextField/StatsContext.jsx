@@ -58,9 +58,6 @@ function StatsContextProvider({ children }) {
         clearInterval(timerRef.current);
         setIsTimerRunning(false);
         setTimeLeft(60);
-        setTotalCorrectChars(0);
-        setTotalTypedChars(0);
-        setTotalIncorrectChars(0);
         setResetFlag(true);
     }, [])
     // Accuracy & WPM
@@ -74,7 +71,7 @@ function StatsContextProvider({ children }) {
         const newScore = getWPM() * (getAccuracy() / 100);
         setBestScore(Math.max(newScore, bestScore));
         document.documentElement.dataset.highScore = bestScore;
-        localStorage.setItem("highScore", Math.max(newScore, bestScore.toString()))
+        localStorage.setItem("highScore", bestScore.toString())
     }
     // Best Score
     
@@ -90,6 +87,7 @@ function StatsContextProvider({ children }) {
                 resetTest,
                 setTotalTypedChars,
                 totalCorrectChars,
+                totalIncorrectChars,
                 setTotalCorrectChars,
                 setTotalIncorrectChars,
                 getAccuracy,

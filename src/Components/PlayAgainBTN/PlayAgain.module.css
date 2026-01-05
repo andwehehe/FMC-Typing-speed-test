@@ -1,0 +1,12 @@
+.play__again {
+    font-size: 1.25rem;
+    font-weight: var(--fw-semibold);
+    display: flex;
+    gap: 0.75rem;
+    padding: 1rem;
+    margin-inline: auto;
+    margin-block: 2.5rem;
+    border-radius: 0.75rem;
+    background-color: var(--neutral-0);
+    cursor: pointer;
+}

@@ -16,6 +16,8 @@
 
   /* Colors — Green */
   --green-500: hsl(140, 63%, 57%);
+  --green-400: rgba(40, 76, 55);
+  --green-300: rgba(19, 39, 27);
 
   /* Colors — Yellow */
   --yellow-400: hsl(49, 85%, 70%);

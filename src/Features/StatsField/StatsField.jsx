@@ -7,7 +7,7 @@ import { StatsContext } from '../TextField/StatsContext'
 function StatsField() {
 
   const { timeLeft } = useContext(StatsContext);
-  const { getAccuracy, getWPM, bestScore } = useContext(StatsContext)
+  const { getAccuracy, getWPM } = useContext(StatsContext)
 
   const DIFFICULTY_DROPDOWN = [
     {
@@ -39,7 +39,7 @@ function StatsField() {
     <section className={styles.statsField}>
 
         {/* Best Score Panel */}
-        <BestScorePanel bestScore={bestScore} />
+        <BestScorePanel />
 
         {/* Real-time Stats */}
         <div className={styles.realTime__stats}>

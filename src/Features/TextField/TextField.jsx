@@ -3,6 +3,7 @@ import WORD_POOL from './data.json'
 import { useState, useContext, useEffect, useRef } from 'react';
 import { StatsContext } from './StatsContext';
 import { DifficultyContext } from '../StatsField/DifficultyContext';
+import { useNavigate } from 'react-router-dom';
 
 function TextField() {
   
@@ -24,7 +25,7 @@ function TextField() {
         resetFlag, 
         setResetFlag,
         bestScore,
-        setNewBestScore
+        setNewBestScore,
     } = useContext(StatsContext);
 
     const inputRef = useRef();
@@ -35,6 +36,8 @@ function TextField() {
 
     let correctCharsCounter = 0;
     let incorrectCharsCounter = 0
+
+    const NAVIGATE_INITIAL_HIGHSCORE = useNavigate();
 
     // Handle input changes (correct input, incorrect input, etc.)
     function handleChange(e) {
@@ -128,7 +131,6 @@ function TextField() {
         setInputValue("");
         setHasIncorrect(false);
         setResetFlag(false);
-        setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length))
     }, [resetFlag, setResetFlag, easy, medium, hard, getDifficulty])
 
     // Reset input when difficulty is changed
@@ -147,9 +149,10 @@ function TextField() {
     useEffect(() => {
         if(timeLeft <= 0 || totalCorrectChars === sample.length) {
             setNewBestScore()
-            resetTest()
+            NAVIGATE_INITIAL_HIGHSCORE("Initial-High-Score");
+            setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length))
         }
-    }, [timeLeft, setNewBestScore, bestScore, totalCorrectChars, sample, resetTest])
+    }, [timeLeft, setNewBestScore, bestScore, totalCorrectChars, sample, resetTest, easy, medium, hard, getDifficulty, NAVIGATE_INITIAL_HIGHSCORE])
 
     return(
         <section className={styles.text__field}>
@@ -200,7 +203,7 @@ function TextField() {
                                 })
                             }
 
-                            {/* EXCESS ERRROR */}
+                            {/* EXCESS ERROR */}
                             {
                                 (() => {
                                     const errors = []

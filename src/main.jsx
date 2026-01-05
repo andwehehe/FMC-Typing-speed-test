@@ -5,12 +5,18 @@ import './global-styles/global.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import App from './App.jsx'
 import ErrorPage from './Pages/ErrorPage/ErrorPage.jsx';
+import InitialHighscore from './Pages/InitialHighScore/InitialHighscore.jsx'
 import StatsContextProvider from './Features/TextField/StatsContext.jsx'
 
 const router = createBrowserRouter([
   {
     path: '/FMC-Typing-speed-test/',
     element: <App />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: '/FMC-Typing-speed-test/Initial-High-Score',
+    element: <InitialHighscore />,
     errorElement: <ErrorPage />,
   },
   {
