@@ -45,14 +45,14 @@ function StatsField() {
         <div className={styles.realTime__stats}>
             <div className={styles.stats__category}>
                 WPM:
-                <span className={styles.realTime__WPM}>{Math.floor(getWPM())}</span>
+                <span className={styles.realTime__WPM}>{Math.ceil(getWPM()).toString()}</span>
             </div>
 
             <hr />
 
             <div className={styles.stats__category}>
                 Accuracy:
-                <span className={styles.realTime__accuracy}>{getAccuracy() ? getAccuracy().toFixed(0) : 100}%</span>
+                <span className={styles.realTime__accuracy}>{getAccuracy() ? Math.ceil(getAccuracy()) : 100}%</span>
             </div>
 
             <hr />

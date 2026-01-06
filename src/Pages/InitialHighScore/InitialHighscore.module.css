@@ -65,3 +65,23 @@
     font-weight: var(--fw-bold);
     color: var(--neutral-0);
 }
+
+.final__character .score {
+    color: var(--neutral-500);
+}
+
+.totalCorrect {
+    color: var(--green-500);
+}
+
+.totalIncorrect {
+    color: var(--red-500);
+}
+
+.perfect {
+    color: var(--green-500);
+}
+
+.not__perfect {
+    color: var(--red-500);
+}

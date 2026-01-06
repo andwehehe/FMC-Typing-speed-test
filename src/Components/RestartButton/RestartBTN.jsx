@@ -5,11 +5,16 @@ import { StatsContext } from '../../Features/TextField/StatsContext'
 
 function RestartBTN() {
 
-    const { resetTest } = useContext(StatsContext)
+    const { resetTest, resetChars } = useContext(StatsContext)
+
+    function reset() {
+        resetTest();
+        resetChars();
+    }
 
     return(
         <div className={styles.restartBTN}>
-            <button onClick={resetTest}>
+            <button onClick={reset}>
                 Restart Test
                 <img src={restartIcon} alt="restart" />
             </button>

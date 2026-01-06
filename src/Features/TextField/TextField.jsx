@@ -137,7 +137,7 @@ function TextField() {
     useEffect(() => {
         setInputValue("");
         setHasIncorrect(false);
-        resetTest()
+        resetTest();
     }, [getDifficulty, resetTest])
 
     // Autofocus to input after mount
@@ -149,10 +149,10 @@ function TextField() {
     useEffect(() => {
         if(timeLeft <= 0 || totalCorrectChars === sample.length) {
             setNewBestScore()
+            setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
             NAVIGATE_INITIAL_HIGHSCORE("Initial-High-Score");
-            setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length))
         }
-    }, [timeLeft, setNewBestScore, bestScore, totalCorrectChars, sample, resetTest, easy, medium, hard, getDifficulty, NAVIGATE_INITIAL_HIGHSCORE])
+    }, [timeLeft, setNewBestScore, bestScore, totalCorrectChars, sample, easy, medium, hard, getDifficulty, NAVIGATE_INITIAL_HIGHSCORE])
 
     return(
         <section className={styles.text__field}>
@@ -165,6 +165,10 @@ function TextField() {
                 value={inputValue}
                 disabled={timeLeft <= 1}
                 ref={inputRef}
+                spellCheck="false"
+                autoCorrect="off"
+                autoCapitalize="off"
+                autoComplete="off"
             />
             <div className={styles.text}>
                 {

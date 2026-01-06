@@ -51,7 +51,8 @@ function StatsContextProvider({ children }) {
         const netChars = totalCorrectChars - totalIncorrectChars;
         const wpm = (netChars / 5) / (timeElapsed / 60);
         
-        return Math.max(0, Math.round(wpm));
+        const accuracyIntegrated = wpm * (getAccuracy() / 100)
+        return Math.max(0, Math.round(accuracyIntegrated));
     };
 
     const resetTest = useCallback(() => {
@@ -60,18 +61,35 @@ function StatsContextProvider({ children }) {
         setTimeLeft(60);
         setResetFlag(true);
     }, [])
+
+    function resetChars() {
+        setTotalCorrectChars(0);
+        setTotalTypedChars(0);
+        setTotalIncorrectChars(0);
+    }
     // Accuracy & WPM
 
 
 
     // Best Score
     const [ bestScore, setBestScore ] = useState(Number(localStorage.getItem("highScore")) || 0);
-    
+    const [ accuracy, setAccuracy ] = useState(Number(localStorage.getItem("accuracy")) || 0)
+    const [ currentWPM, setCurrentWPM ] = useState(Number(localStorage.getItem("currentWPM") || 0));
+    const [ currentCorrectChars, setCurrentCorrectChars ] = useState(Number(localStorage.getItem("currentCorrect") || 0));
+    const [ currentIncorrectChars, setCurrentIncorrectChars ] = useState(Number(localStorage.getItem("currentIncorrect") || 0));
+
     function setNewBestScore() {
-        const newScore = getWPM() * (getAccuracy() / 100);
-        setBestScore(Math.max(newScore, bestScore));
-        document.documentElement.dataset.highScore = bestScore;
-        localStorage.setItem("highScore", bestScore.toString())
+        setBestScore(Math.max(getWPM(), bestScore));
+        setAccuracy(Math.max(getAccuracy(), accuracy));
+        setCurrentWPM(getWPM());
+        setCurrentCorrectChars(totalCorrectChars);
+        setCurrentIncorrectChars(totalIncorrectChars);
+
+        localStorage.setItem("highScore", bestScore.toString());
+        localStorage.setItem("accuracy", accuracy.toString());
+        localStorage.setItem("currentWPM", getWPM().toString());
+        localStorage.setItem("currentCorrect", totalCorrectChars.toString());
+        localStorage.setItem("currentIncorrect", totalIncorrectChars.toString());
     }
     // Best Score
     
@@ -88,14 +106,19 @@ function StatsContextProvider({ children }) {
                 setTotalTypedChars,
                 totalCorrectChars,
                 totalIncorrectChars,
+                currentCorrectChars,
+                currentIncorrectChars,
                 setTotalCorrectChars,
                 setTotalIncorrectChars,
                 getAccuracy,
+                accuracy,
                 getWPM,
+                currentWPM,
                 setNewBestScore,
                 bestScore,
                 setResetFlag,
-                resetFlag
+                resetFlag,
+                resetChars
             }}
         >
             {children}

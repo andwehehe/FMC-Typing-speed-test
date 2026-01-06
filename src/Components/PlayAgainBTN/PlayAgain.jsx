@@ -7,12 +7,10 @@ import { StatsContext } from '../../Features/TextField/StatsContext';
 function PlayAgain({ prompt }) {
 
     const NAVIGATE__PLAY_AGAIN = useNavigate();
-    const { setTotalCorrectChars, setTotalTypedChars, setTotalIncorrectChars } = useContext(StatsContext);
+    const { resetChars } = useContext(StatsContext);
 
     function handleClick() {
-        setTotalCorrectChars(0);
-        setTotalTypedChars(0);
-        setTotalIncorrectChars(0);
+        resetChars();
         NAVIGATE__PLAY_AGAIN("/FMC-Typing-speed-test/");
     }
 

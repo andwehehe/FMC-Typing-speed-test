@@ -10,7 +10,12 @@ import { useContext } from 'react';
 
 function InitialHighscore() {
 
-    const { bestScore, getAccuracy, totalCorrectChars, totalIncorrectChars } = useContext(StatsContext);
+    const { 
+        currentWPM,
+        accuracy, 
+        currentCorrectChars, 
+        currentIncorrectChars,
+    } = useContext(StatsContext);
 
     return(
         <section className={styles.initialHighscore}>
@@ -40,18 +45,22 @@ function InitialHighscore() {
 
                 <div className={styles.final__WPM}>
                     <p className={styles.category}>WPM:</p>
-                    <p className={styles.score}>{Math.ceil(bestScore)}</p>
+                    <p className={styles.score}>{Math.ceil(currentWPM)}</p>
                 </div>
 
                 <div className={styles.final__accuracy}>
                     <p className={styles.category}>Accuracy:</p>
-                    <p className={styles.score}>{getAccuracy()}%</p>
+                    <p className={`${styles.score} ${styles[accuracy === 100 ? "perfect" : "not__perfect"]}`}>
+                        {Math.ceil(accuracy)}%
+                    </p>
                 </div>
 
                 <div className={styles.final__character}>
                     <p className={styles.category}>Characters</p>
                     <p className={styles.score}>
-                        {totalCorrectChars}/{totalIncorrectChars}
+                        <span className={styles.totalCorrect}>{currentCorrectChars}</span>
+                        / 
+                        <span className={styles.totalIncorrect}>{currentIncorrectChars}</span>
                     </p>
                 </div>
 
