@@ -34,6 +34,7 @@ function StatsContextProvider({ children }) {
 
 
     // Accuracy & WPM
+    const [ testLength, setTestLength ] = useState(0);
     const [ resetFlag, setResetFlag ] = useState(false);
     const [ totalTypedChars, setTotalTypedChars ] = useState(0);
     const [ totalCorrectChars, setTotalCorrectChars ] = useState(0);
@@ -62,11 +63,11 @@ function StatsContextProvider({ children }) {
         setResetFlag(true);
     }, [])
 
-    function resetChars() {
+    const resetChars = useCallback(() => {
         setTotalCorrectChars(0);
         setTotalTypedChars(0);
         setTotalIncorrectChars(0);
-    }
+    }, [])
     // Accuracy & WPM
 
 
@@ -76,20 +77,16 @@ function StatsContextProvider({ children }) {
     const [ accuracy, setAccuracy ] = useState(Number(localStorage.getItem("accuracy")) || 0)
     const [ currentWPM, setCurrentWPM ] = useState(Number(localStorage.getItem("currentWPM") || 0));
     const [ currentCorrectChars, setCurrentCorrectChars ] = useState(Number(localStorage.getItem("currentCorrect") || 0));
-    const [ currentIncorrectChars, setCurrentIncorrectChars ] = useState(Number(localStorage.getItem("currentIncorrect") || 0));
-
+    // localStorage.setItem("highScore", "0");
     function setNewBestScore() {
         setBestScore(Math.max(getWPM(), bestScore));
-        setAccuracy(Math.max(getAccuracy(), accuracy));
+        setAccuracy(getAccuracy());
         setCurrentWPM(getWPM());
         setCurrentCorrectChars(totalCorrectChars);
-        setCurrentIncorrectChars(totalIncorrectChars);
-
         localStorage.setItem("highScore", bestScore.toString());
         localStorage.setItem("accuracy", accuracy.toString());
         localStorage.setItem("currentWPM", getWPM().toString());
         localStorage.setItem("currentCorrect", totalCorrectChars.toString());
-        localStorage.setItem("currentIncorrect", totalIncorrectChars.toString());
     }
     // Best Score
     
@@ -103,11 +100,12 @@ function StatsContextProvider({ children }) {
                 setIsTimerRunning, 
                 startTimer,
                 resetTest,
+                testLength, 
+                setTestLength,
                 setTotalTypedChars,
                 totalCorrectChars,
                 totalIncorrectChars,
                 currentCorrectChars,
-                currentIncorrectChars,
                 setTotalCorrectChars,
                 setTotalIncorrectChars,
                 getAccuracy,

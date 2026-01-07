@@ -10,7 +10,7 @@ function TextField() {
     const { easy, medium, hard } = WORD_POOL;
     const { getDifficulty } = useContext(DifficultyContext);
     const [ randomLevel, setRandomLevel ] = useState(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
-    const sample = getDifficulty(easy, medium, hard)[randomLevel].text;
+    const test = getDifficulty(easy, medium, hard)[randomLevel].text;
 
     // Stats Contexts
     const { 
@@ -18,6 +18,8 @@ function TextField() {
         isTimerRunning, 
         timeLeft, 
         resetTest,
+        resetChars,
+        setTestLength,
         setTotalTypedChars, 
         totalCorrectChars,
         setTotalCorrectChars, 
@@ -26,12 +28,13 @@ function TextField() {
         setResetFlag,
         bestScore,
         setNewBestScore,
+        setTimeLeft
     } = useContext(StatsContext);
 
     const inputRef = useRef();
     const [ hasIncorrect, setHasIncorrect ] = useState(false);
     const [ inputValue, setInputValue ] = useState("");
-    const words = sample.split(" ");
+    const words = test.split(" ");
     let globalIndex = 0;
 
     let correctCharsCounter = 0;
@@ -41,14 +44,14 @@ function TextField() {
 
     // Handle input changes (correct input, incorrect input, etc.)
     function handleChange(e) {
-        if(e.target.value.length > sample.length) return;
+        if(e.target.value.length > test.length) return;
         
         const newValue = e.target.value;
         setInputValue(newValue);
         setTotalTypedChars(prev => prev + 1);
         
         [...newValue].forEach((char, index) => {
-            if(char === sample[index]) {
+            if(char === test[index]) {
                 correctCharsCounter++;
             } else {
                 incorrectCharsCounter++;
@@ -59,7 +62,7 @@ function TextField() {
         setTotalIncorrectChars(incorrectCharsCounter);
 
         const foundIncorrect = [...newValue].some((char, index) => {
-            return char !== sample[index]
+            return char !== test[index]
         })
         setHasIncorrect(foundIncorrect);
     }
@@ -127,7 +130,7 @@ function TextField() {
 
     // Reset input when the restart button is clicked
     useEffect(() => {
-        if(resetFlag === false) return;
+        if(!resetFlag) return;
         setInputValue("");
         setHasIncorrect(false);
         setResetFlag(false);
@@ -138,21 +141,24 @@ function TextField() {
         setInputValue("");
         setHasIncorrect(false);
         resetTest();
-    }, [getDifficulty, resetTest])
+        resetChars()
+    }, [getDifficulty, resetTest, resetChars])
 
     // Autofocus to input after mount
     useEffect(() => {
         inputRef.current.focus();
     }, [])
 
-    // Update best score after timer drops to zero or if the test is done
+    // Update best score after timer drops to zero or if the test is done   
     useEffect(() => {
-        if(timeLeft <= 0 || totalCorrectChars === sample.length) {
-            setNewBestScore()
+        if(timeLeft <= 0 || totalCorrectChars === test.length) {
+            setTestLength(test.length)
+            setTimeLeft(60);
+            setNewBestScore();
             setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
             NAVIGATE_INITIAL_HIGHSCORE("Initial-High-Score");
         }
-    }, [timeLeft, setNewBestScore, bestScore, totalCorrectChars, sample, easy, medium, hard, getDifficulty, NAVIGATE_INITIAL_HIGHSCORE])
+    }, [timeLeft, setTimeLeft, setNewBestScore, bestScore, totalCorrectChars, test, easy, medium, hard, getDifficulty, NAVIGATE_INITIAL_HIGHSCORE, setTestLength])
 
     return(
         <section className={styles.text__field}>

@@ -13,8 +13,8 @@ function InitialHighscore() {
     const { 
         currentWPM,
         accuracy, 
+        testLength,
         currentCorrectChars, 
-        currentIncorrectChars,
     } = useContext(StatsContext);
 
     return(
@@ -60,7 +60,7 @@ function InitialHighscore() {
                     <p className={styles.score}>
                         <span className={styles.totalCorrect}>{currentCorrectChars}</span>
                         / 
-                        <span className={styles.totalIncorrect}>{currentIncorrectChars}</span>
+                        <span className={styles.totalIncorrect}>{testLength - currentCorrectChars}</span>
                     </p>
                 </div>
 

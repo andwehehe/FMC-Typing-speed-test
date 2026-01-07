@@ -10,8 +10,8 @@ function PlayAgain({ prompt }) {
     const { resetChars } = useContext(StatsContext);
 
     function handleClick() {
-        resetChars();
         NAVIGATE__PLAY_AGAIN("/FMC-Typing-speed-test/");
+        resetChars();
     }
 
     return(
