@@ -28,7 +28,7 @@ function TextField() {
         setResetFlag,
         bestScore,
         setNewBestScore,
-        setTimeLeft
+        setTimeLeft,
     } = useContext(StatsContext);
 
     const inputRef = useRef();
@@ -153,12 +153,26 @@ function TextField() {
     useEffect(() => {
         if(timeLeft <= 0 || totalCorrectChars === test.length) {
             setTestLength(test.length)
+            localStorage.setItem("testLength", test.length.toString());
             setTimeLeft(60);
             setNewBestScore();
             setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
             NAVIGATE_INITIAL_HIGHSCORE("Initial-High-Score");
         }
-    }, [timeLeft, setTimeLeft, setNewBestScore, bestScore, totalCorrectChars, test, easy, medium, hard, getDifficulty, NAVIGATE_INITIAL_HIGHSCORE, setTestLength])
+    }, [
+        timeLeft, 
+        setTimeLeft, 
+        setNewBestScore, 
+        bestScore, 
+        totalCorrectChars, 
+        test, 
+        easy, 
+        medium, 
+        hard, 
+        getDifficulty, 
+        NAVIGATE_INITIAL_HIGHSCORE, 
+        setTestLength,
+    ])
 
     return(
         <section className={styles.text__field}>

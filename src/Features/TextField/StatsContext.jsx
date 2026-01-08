@@ -34,7 +34,7 @@ function StatsContextProvider({ children }) {
 
 
     // Accuracy & WPM
-    const [ testLength, setTestLength ] = useState(0);
+    const [ testLength, setTestLength ] = useState(Number(localStorage.getItem("testLength")) || 0);
     const [ resetFlag, setResetFlag ] = useState(false);
     const [ totalTypedChars, setTotalTypedChars ] = useState(0);
     const [ totalCorrectChars, setTotalCorrectChars ] = useState(0);
@@ -73,6 +73,7 @@ function StatsContextProvider({ children }) {
 
 
     // Best Score
+    const [ isFirstGame, setIsFirstGame ] = useState(localStorage.getItem("isFirstGame") || "true");
     const [ bestScore, setBestScore ] = useState(Number(localStorage.getItem("highScore")) || 0);
     const [ accuracy, setAccuracy ] = useState(Number(localStorage.getItem("accuracy")) || 0)
     const [ currentWPM, setCurrentWPM ] = useState(Number(localStorage.getItem("currentWPM") || 0));
@@ -116,7 +117,9 @@ function StatsContextProvider({ children }) {
                 bestScore,
                 setResetFlag,
                 resetFlag,
-                resetChars
+                resetChars,
+                isFirstGame,
+                setIsFirstGame
             }}
         >
             {children}

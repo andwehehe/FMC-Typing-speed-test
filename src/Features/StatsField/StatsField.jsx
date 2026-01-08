@@ -45,7 +45,7 @@ function StatsField() {
         <div className={styles.realTime__stats}>
             <div className={styles.stats__category}>
                 WPM:
-                <span className={styles.realTime__WPM}>{Math.ceil(getWPM()).toString()}</span>
+                <span className={styles.realTime__WPM}>{Math.ceil(getWPM()) || 0}</span>
             </div>
 
             <hr />
