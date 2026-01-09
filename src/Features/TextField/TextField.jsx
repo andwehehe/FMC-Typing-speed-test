@@ -13,23 +13,31 @@ function TextField() {
     const test = getDifficulty(easy, medium, hard)[randomLevel].text;
 
     // Stats Contexts
-    const { 
-        startTimer, 
-        isTimerRunning, 
-        timeLeft, 
-        resetTest,
-        resetChars,
+    const {
+        // timer
+        startTimer,
+        isTimerRunning,
+        timeLeft,
+        setTimeLeft,
         setTestLength,
-        setTotalTypedChars, 
+
+        // typing stats
+        setTotalTypedChars,
         totalCorrectChars,
-        setTotalCorrectChars, 
+        setTotalCorrectChars,
         setTotalIncorrectChars,
-        resetFlag, 
-        setResetFlag,
+
+        // score
         bestScore,
         setNewBestScore,
-        setTimeLeft,
+
+        // game state / resets
+        resetTest,
+        resetChars,
+        resetFlag,
+        setResetFlag,
     } = useContext(StatsContext);
+
 
     const inputRef = useRef();
     const [ hasIncorrect, setHasIncorrect ] = useState(false);

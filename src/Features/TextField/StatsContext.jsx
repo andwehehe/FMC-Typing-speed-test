@@ -92,34 +92,45 @@ function StatsContextProvider({ children }) {
     // Best Score
     
 
-    return(
-        <StatsContext.Provider 
+    return (
+        <StatsContext.Provider
             value={{
-                timeLeft, 
-                setTimeLeft,
-                isTimerRunning, 
-                setIsTimerRunning, 
-                startTimer,
-                resetTest,
-                testLength, 
-                setTestLength,
-                setTotalTypedChars,
-                totalCorrectChars,
-                totalIncorrectChars,
-                currentCorrectChars,
-                setTotalCorrectChars,
-                setTotalIncorrectChars,
-                getAccuracy,
-                accuracy,
-                getWPM,
-                currentWPM,
-                setNewBestScore,
-                bestScore,
-                setResetFlag,
-                resetFlag,
-                resetChars,
-                isFirstGame,
-                setIsFirstGame
+            // timer
+            timeLeft,
+            setTimeLeft,
+            isTimerRunning,
+            setIsTimerRunning,
+            startTimer,
+            testLength,
+            setTestLength,
+
+            // typing stats
+            setTotalTypedChars,
+            totalCorrectChars,
+            totalIncorrectChars,
+            currentCorrectChars,
+            setTotalCorrectChars,
+            setTotalIncorrectChars,
+            getAccuracy,
+            accuracy,
+
+            // wpm
+            getWPM,
+            currentWPM,
+
+            // score
+            setNewBestScore,
+            bestScore,
+
+            // game state
+            isFirstGame,
+            setIsFirstGame,
+            resetFlag,
+            setResetFlag,
+
+            // actions / resets
+            resetTest,
+            resetChars,
             }}
         >
             {children}
