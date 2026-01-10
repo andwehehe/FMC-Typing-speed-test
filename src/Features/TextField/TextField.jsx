@@ -191,7 +191,7 @@ function TextField() {
                 onKeyDown={handleKeyDown}
                 onPaste={e => e.preventDefault()} 
                 value={inputValue}
-                disabled={timeLeft <= 1}
+                disabled={timeLeft <= 0}
                 ref={inputRef}
                 spellCheck="false"
                 autoCorrect="off"
