@@ -1,5 +1,6 @@
 /* BEST SCORE PANEL */
 .best__scorePanel {
+    font-size: clamp(1rem, 3vw, 1.2rem);
     display: flex;
     justify-content: space-between;
     margin-block-end: 1rem;
@@ -16,4 +17,8 @@
 .best__score span {
     color: var(--neutral-500);
     margin-inline: 0.5rem 0.1rem;
+}
+
+.best__score img {
+    width: clamp(1.3125rem, 3vw, 1.5rem);
 }

@@ -1,3 +1,7 @@
+.postTestPanel {
+    overflow: hidden;
+}
+
 .heading {
     text-align: center;
 }
@@ -12,14 +16,23 @@
 .star2 {
     position: absolute;
     left: 0%;
-    top: 50%;
-    width: 1.5rem;
+    top: clamp(2.5rem, 7.5vw, 7rem);
+    width: clamp(1.5rem, 3vw, 2rem);
 }
 
 .star1 {
     position: absolute;
     right: 7%;
-    width: 3rem;
+    width: clamp(3rem, 5vw, 5rem);
+}
+
+.confettiContainer {
+    position: absolute;
+    left: 0%;
+    bottom: 1%;
+    width: 100%;
+    height: 30rem;
+    overflow: hidden;
 }
 
 .confetti {
@@ -27,23 +40,25 @@
     z-index: -1;
     left: 53%;
     bottom: 3%;
-    max-width: 100%;
     transform: scale(2.3);
 }
 
 .completed-icon {
     border-radius: 50%;
-    border: solid 0.5rem var(--green-400);
-    outline: solid 0.5rem var(--green-300);
+    border: solid var(--green-400);
+    border-width: clamp(0.5rem, 1vw, 1rem);
+    outline: solid var(--green-300);
+    outline-width: clamp(0.5rem, 1vw, 1rem);
     background-color: var(--neutral-500);
 }
 
 .title {
-    font-size: 1.6rem;
+    font-size: clamp(1.6rem, 3vw, 2.6rem);
     color: var(--neutral-0);
 }
 
 .description {
+    font-size: clamp(1rem, 3vw, 1.2rem);
     color: var(--neutral-500);
     margin-block: 0.75rem;
 }
@@ -93,4 +108,31 @@
 
 .not__perfect {
     color: var(--red-500);
+}
+
+@media (min-width: 768px) {
+    .final__stats{
+        flex-direction: row;
+        justify-content: center;
+        margin-block: 4rem;
+    }
+
+    .final__stats > * {
+        width: 11rem;
+    }
+
+    .star1 {
+        bottom: calc(10vw + 22rem);
+    }
+
+    .confetti {
+        left: 0%;
+        bottom: 0%;
+        transform: scale(1.5);
+        width: 100%;
+    }
+
+    .confettiContainer {
+        height: 15vw;
+    }
 }

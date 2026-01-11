@@ -33,6 +33,14 @@ input, button, textarea, select {
 
 body {
   font-family: 'Sora', sans-serif;
-  padding: 1rem;
+  padding-inline: 1rem;
+  padding-block: clamp(1rem, 3vw, 2rem);
   background-color: var(--neutral-900);
+}
+
+@media (min-width: 768px) {
+  body {
+    margin-inline: auto;
+    max-width: 85vw;
+  }
 }

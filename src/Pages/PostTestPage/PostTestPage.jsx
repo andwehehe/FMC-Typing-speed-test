@@ -47,7 +47,7 @@ function InitialHighscore() {
     }
 
     return(
-        <section className={styles.initialHighscore}>
+        <section className={styles.postTestPanel}>
             <BestScorePanel />
 
             <article className={styles.heading}>
@@ -128,12 +128,16 @@ function InitialHighscore() {
                 src={star1} 
                 alt="star 1" 
             />
-            <img 
-                className={styles.confetti} 
+            <div 
+                className={styles.confettiContainer} 
                 style={{display: currentWPM < bestScore ? "none" : "block"}}
-                src={NEW__BEST.footerIcon} 
-                alt="confetti" 
-            />
+            > 
+                <img 
+                    className={styles.confetti} 
+                    src={NEW__BEST.footerIcon} 
+                    alt="confetti" 
+                />
+            </div>
         </section>
     );
 }

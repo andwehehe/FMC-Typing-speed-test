@@ -19,12 +19,6 @@ function DropdownBTN({ content }) {
         setIsDropdownOpen(prev => !prev);
     }
 
-    // useEffect(() => {
-    //     if(content[0].name === "difficulty" && selectedDifficulty) {
-    //         setSelectedRadio(selectedDifficulty);
-    //     }
-    // }, [])
-
     return(
         <div className={styles.dropdownBTN__container}>
 
