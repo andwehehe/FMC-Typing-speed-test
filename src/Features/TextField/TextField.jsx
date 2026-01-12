@@ -3,16 +3,26 @@ import WORD_POOL from './data.json'
 import { useState, useContext, useEffect, useRef } from 'react';
 import { StatsContext } from './StatsContext';
 import { DifficultyContext } from '../StatsField/DifficultyContext';
+import { ModeContext } from '../StatsField/ModeContext';
 import { useNavigate } from 'react-router-dom';
 
 function TextField() {
   
+    // JSON data
     const { easy, medium, hard } = WORD_POOL;
+
+    // Difficulty Context
     const { getDifficulty } = useContext(DifficultyContext);
+    // Mode Context
+    const { selectedMode } = useContext(ModeContext)
+
+    // Level Randomizer
     const [ randomLevel, setRandomLevel ] = useState(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
+    
+    // Generated Random Level
     const test = getDifficulty(easy, medium, hard)[randomLevel].text;
 
-    // Stats Contexts
+    // Stats Context
     const {
         // timer
         startTimer,
@@ -38,7 +48,6 @@ function TextField() {
         setResetFlag,
     } = useContext(StatsContext);
 
-
     const inputRef = useRef();
     const [ hasIncorrect, setHasIncorrect ] = useState(false);
     const [ inputValue, setInputValue ] = useState("");
@@ -48,7 +57,7 @@ function TextField() {
     let correctCharsCounter = 0;
     let incorrectCharsCounter = 0
 
-    const NAVIGATE_INITIAL_HIGHSCORE = useNavigate();
+    const NAVIGATE_TO_POSTTEST = useNavigate();
 
     // Handle input changes (correct input, incorrect input, etc.)
     function handleChange(e) {
@@ -144,13 +153,21 @@ function TextField() {
         setResetFlag(false);
     }, [resetFlag, setResetFlag, easy, medium, hard, getDifficulty])
 
-    // Reset input when difficulty is changed
+    // Reset input when difficulty or mode is changed / on every mount
     useEffect(() => {
         setInputValue("");
         setHasIncorrect(false);
         resetTest();
-        resetChars()
-    }, [getDifficulty, resetTest, resetChars])
+        resetChars();
+
+        if(selectedMode === "Passage") {
+            setTimeLeft(0);
+        }
+
+        if(selectedMode === "Timed (60s)") {
+            setTimeLeft(60);
+        }
+    }, [getDifficulty, resetTest, resetChars, selectedMode, setTimeLeft])
 
     // Autofocus to input after mount
     useEffect(() => {
@@ -159,13 +176,13 @@ function TextField() {
 
     // Update best score after timer drops to zero or if the test is done   
     useEffect(() => {
-        if(timeLeft <= 0 || totalCorrectChars === test.length) {
+        if((timeLeft <= 0 || totalCorrectChars === test.length) && selectedMode === "Timed (60s)") {
             setTestLength(test.length)
             localStorage.setItem("testLength", test.length.toString());
             setTimeLeft(60);
             setNewBestScore();
             setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
-            NAVIGATE_INITIAL_HIGHSCORE("Initial-High-Score");
+            NAVIGATE_TO_POSTTEST("Initial-High-Score");
         }
     }, [
         timeLeft, 
@@ -178,8 +195,9 @@ function TextField() {
         medium, 
         hard, 
         getDifficulty, 
-        NAVIGATE_INITIAL_HIGHSCORE, 
+        NAVIGATE_TO_POSTTEST, 
         setTestLength,
+        selectedMode
     ])
 
     return(

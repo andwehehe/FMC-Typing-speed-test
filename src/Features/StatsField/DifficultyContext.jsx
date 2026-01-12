@@ -5,7 +5,7 @@ export const DifficultyContext = createContext();
 
 function DifficultyContextProvider({ children }) {
 
-    const [ selectedDifficulty, setSelectedDifficulty ] = useState("Easy");
+    const [ selectedDifficulty, setSelectedDifficulty ] = useState(localStorage.getItem("difficulty") || "Easy");
 
     function getDifficulty(easy, medium, hard) {
         switch(selectedDifficulty) {
@@ -22,7 +22,8 @@ function DifficultyContextProvider({ children }) {
         <DifficultyContext.Provider
             value={{
                 setSelectedDifficulty,
-                getDifficulty
+                getDifficulty,
+                selectedDifficulty
             }}
         >
             {children}

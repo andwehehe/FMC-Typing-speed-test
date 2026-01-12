@@ -6,11 +6,11 @@ import { StatsContext } from '../../Features/TextField/StatsContext';
 
 function PlayAgain({ prompt }) {
 
-    const NAVIGATE__PLAY_AGAIN = useNavigate();
+    const NAVIGATE_TO_MAIN = useNavigate();
     const { resetChars, setIsFirstGame } = useContext(StatsContext);
 
     function handleClick() {
-        NAVIGATE__PLAY_AGAIN("/FMC-Typing-speed-test/");
+        NAVIGATE_TO_MAIN("/FMC-Typing-speed-test/");
         resetChars();
         setIsFirstGame("false");
         localStorage.setItem("isFirstGame", "false");
