@@ -1,22 +1,29 @@
-import { useState, createContext, useRef, useEffect, useCallback } from "react";
+import { useState, createContext, useRef, useEffect, useCallback, useContext } from "react";
+import { ModeContext } from "../StatsField/ModeContext";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const StatsContext = createContext()
 
 function StatsContextProvider({ children }) {
 
-    // Timer
+    // Timer for Timed mode
     const [ timeLeft, setTimeLeft ] = useState(60);
     const [ isTimerRunning, setIsTimerRunning ] = useState(false);
+    const throughCountdown = useRef(false);
     const timerRef = useRef(null);
+    const { selectedMode } = useContext(ModeContext);
 
     function startTimer() {
-        if(isTimerRunning) return;
+        if(isTimerRunning || selectedMode === "Passage") return;
 
         setIsTimerRunning(true);
+        throughCountdown.current = true;
+        console.log(selectedMode)
+
         timerRef.current = setInterval(() => {
             setTimeLeft(prev => {
                 if(prev <= 1) {
+                    
                     clearInterval(timerRef.current);
                     setIsTimerRunning(false);
                     return 0;
@@ -29,7 +36,7 @@ function StatsContextProvider({ children }) {
     useEffect(() => {
         return () => clearInterval(timerRef.current)
     }, [])
-    // Timer
+    // Timer for Timed Mode
 
 
 
@@ -56,12 +63,24 @@ function StatsContextProvider({ children }) {
         return Math.max(0, Math.round(accuracyIntegrated));
     };
 
+    const modeBasedTime = useCallback(() => {
+        if(selectedMode === "Passage") {
+            setTimeLeft(0);
+        } else if(selectedMode === "Timed (60s)") {
+            setTimeLeft(60);
+        } else if(selectedMode === "Timed (30s)") {
+            setTimeLeft(30);
+        } else if(selectedMode === "Timed (15s)") {
+            setTimeLeft(15);
+        }
+    }, [selectedMode])
+
     const resetTest = useCallback(() => {
         clearInterval(timerRef.current);
         setIsTimerRunning(false);
-        setTimeLeft(60);
         setResetFlag(true);
-    }, [])
+        modeBasedTime();
+    }, [modeBasedTime])
 
     const resetChars = useCallback(() => {
         setTotalCorrectChars(0);
@@ -78,7 +97,7 @@ function StatsContextProvider({ children }) {
     const [ accuracy, setAccuracy ] = useState(Number(localStorage.getItem("accuracy")) || 0)
     const [ currentWPM, setCurrentWPM ] = useState(Number(localStorage.getItem("currentWPM") || 0));
     const [ currentCorrectChars, setCurrentCorrectChars ] = useState(Number(localStorage.getItem("currentCorrect") || 0));
-    // localStorage.setItem("highScore", "0");
+
     function setNewBestScore() {
         setBestScore(Math.max(getWPM(), bestScore));
         setAccuracy(getAccuracy());
@@ -103,6 +122,8 @@ function StatsContextProvider({ children }) {
             startTimer,
             testLength,
             setTestLength,
+            throughCountdown,
+            modeBasedTime,
 
             // typing stats
             setTotalTypedChars,

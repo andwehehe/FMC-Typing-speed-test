@@ -31,6 +31,14 @@ function StatsField() {
     },
     {
       name: "mode",
+      value: "Timed (30s)"
+    },
+    {
+      name: "mode",
+      value: "Timed (15s)"
+    },
+    {
+      name: "mode",
       value: "Passage"
     }
   ]

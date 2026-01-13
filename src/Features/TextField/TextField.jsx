@@ -13,8 +13,9 @@ function TextField() {
 
     // Difficulty Context
     const { getDifficulty } = useContext(DifficultyContext);
+
     // Mode Context
-    const { selectedMode } = useContext(ModeContext)
+    const { selectedMode } = useContext(ModeContext);
 
     // Level Randomizer
     const [ randomLevel, setRandomLevel ] = useState(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
@@ -30,6 +31,8 @@ function TextField() {
         timeLeft,
         setTimeLeft,
         setTestLength,
+        throughCountdown,
+        modeBasedTime,
 
         // typing stats
         setTotalTypedChars,
@@ -53,10 +56,8 @@ function TextField() {
     const [ inputValue, setInputValue ] = useState("");
     const words = test.split(" ");
     let globalIndex = 0;
-
     let correctCharsCounter = 0;
     let incorrectCharsCounter = 0
-
     const NAVIGATE_TO_POSTTEST = useNavigate();
 
     // Handle input changes (correct input, incorrect input, etc.)
@@ -159,15 +160,9 @@ function TextField() {
         setHasIncorrect(false);
         resetTest();
         resetChars();
-
-        if(selectedMode === "Passage") {
-            setTimeLeft(0);
-        }
-
-        if(selectedMode === "Timed (60s)") {
-            setTimeLeft(60);
-        }
-    }, [getDifficulty, resetTest, resetChars, selectedMode, setTimeLeft])
+        throughCountdown.current = false;
+        modeBasedTime();
+    }, [getDifficulty, resetTest, resetChars, selectedMode, setTimeLeft, throughCountdown, modeBasedTime])
 
     // Autofocus to input after mount
     useEffect(() => {
@@ -176,12 +171,14 @@ function TextField() {
 
     // Update best score after timer drops to zero or if the test is done   
     useEffect(() => {
-        if((timeLeft <= 0 || totalCorrectChars === test.length) && selectedMode === "Timed (60s)") {
+        if((timeLeft <= 0 || totalCorrectChars === test.length) && !(selectedMode === "Passage") && throughCountdown.current) {
             setTestLength(test.length)
             localStorage.setItem("testLength", test.length.toString());
             setTimeLeft(60);
             setNewBestScore();
-            setRandomLevel(() => Math.floor(Math.random() * getDifficulty(easy, medium, hard).length));
+            setRandomLevel(() => 
+                Math.floor(Math.random() * getDifficulty(easy, medium, hard).length)
+            );
             NAVIGATE_TO_POSTTEST("Initial-High-Score");
         }
     }, [
@@ -197,7 +194,8 @@ function TextField() {
         getDifficulty, 
         NAVIGATE_TO_POSTTEST, 
         setTestLength,
-        selectedMode
+        selectedMode,
+        throughCountdown
     ])
 
     return(
