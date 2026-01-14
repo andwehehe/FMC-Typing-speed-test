@@ -41,7 +41,7 @@ function StatsContextProvider({ children }) {
 
     // Timer for Passage Mode
     const passageTimerRef = useRef(null);
-    const isTestDone = useRef(false);
+    const isPassageTestDone = useRef(false);
 
     function startPassageTimer() {
         if(isTimerRunning || !(selectedMode === "Passage")) return;
@@ -51,7 +51,7 @@ function StatsContextProvider({ children }) {
 
         passageTimerRef.current = setInterval(() => {
             setTimeLeft(prev => {
-                if(isTestDone.current) {
+                if(isPassageTestDone.current) {
                     clearInterval(passageTimerRef.current);
                     setIsTimerRunning(false);
                 }
@@ -162,7 +162,7 @@ function StatsContextProvider({ children }) {
             throughCountdown,
             modeBasedTime,
             startPassageTimer,
-            isTestDone,
+            isPassageTestDone,
 
             // typing stats
             setTotalTypedChars,

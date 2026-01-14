@@ -34,7 +34,7 @@ function TextField() {
         throughCountdown,
         modeBasedTime,
         startPassageTimer,
-        isTestDone,
+        isPassageTestDone,
 
         // typing stats
         setTotalTypedChars,
@@ -166,11 +166,11 @@ function TextField() {
     // Update best score after timer drops to zero or if the test is done   
     useEffect(() => {
         if(totalCorrectChars === test.length) {
-            isTestDone.current = true;
+            isPassageTestDone.current = true;
         }
 
         if(selectedMode === "Passage") {
-            if(!isTestDone.current) return;
+            if(!isPassageTestDone.current) return;
         } 
 
         if((timeLeft <= 0 || totalCorrectChars === test.length) && throughCountdown.current) {
@@ -198,7 +198,7 @@ function TextField() {
         setTestLength,
         selectedMode,
         throughCountdown,
-        isTestDone
+        isPassageTestDone
     ])
 
     return(
@@ -210,7 +210,6 @@ function TextField() {
                 onKeyDown={handleKeyDown}
                 onPaste={e => e.preventDefault()} 
                 value={inputValue}
-                disabled={timeLeft <= 0 && selectedMode !== "Passage"}
                 ref={inputRef}
                 spellCheck="false"
                 autoCorrect="off"
