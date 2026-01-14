@@ -33,6 +33,8 @@ function TextField() {
         setTestLength,
         throughCountdown,
         modeBasedTime,
+        startPassageTimer,
+        isTestDone,
 
         // typing stats
         setTotalTypedChars,
@@ -124,7 +126,9 @@ function TextField() {
                 ) {
                     return;
                 }
+                startPassageTimer();    
                 startTimer();
+                
             }
             inputRef.current.focus();
         };
@@ -134,17 +138,7 @@ function TextField() {
         return() => {
             window.removeEventListener("keydown", handleGlobalKeydown);
         }
-    }, [isTimerRunning, inputValue, startTimer])
-
-    // Reset input when timer drops to 0
-    useEffect(() => {
-        if(timeLeft <= 1) {
-            setTimeout(() => {
-                setInputValue("");
-                setHasIncorrect(false);
-            }, 1000)
-        }
-    }, [timeLeft])
+    }, [isTimerRunning, inputValue, startTimer, startPassageTimer])
 
     // Reset input when the restart button is clicked
     useEffect(() => {
@@ -171,7 +165,15 @@ function TextField() {
 
     // Update best score after timer drops to zero or if the test is done   
     useEffect(() => {
-        if((timeLeft <= 0 || totalCorrectChars === test.length) && !(selectedMode === "Passage") && throughCountdown.current) {
+        if(totalCorrectChars === test.length) {
+            isTestDone.current = true;
+        }
+
+        if(selectedMode === "Passage") {
+            if(!isTestDone.current) return;
+        } 
+
+        if((timeLeft <= 0 || totalCorrectChars === test.length) && throughCountdown.current) {
             setTestLength(test.length)
             localStorage.setItem("testLength", test.length.toString());
             setTimeLeft(60);
@@ -195,7 +197,8 @@ function TextField() {
         NAVIGATE_TO_POSTTEST, 
         setTestLength,
         selectedMode,
-        throughCountdown
+        throughCountdown,
+        isTestDone
     ])
 
     return(
@@ -207,7 +210,7 @@ function TextField() {
                 onKeyDown={handleKeyDown}
                 onPaste={e => e.preventDefault()} 
                 value={inputValue}
-                disabled={timeLeft <= 0}
+                disabled={timeLeft <= 0 && selectedMode !== "Passage"}
                 ref={inputRef}
                 spellCheck="false"
                 autoCorrect="off"

@@ -7,7 +7,7 @@ export const StatsContext = createContext()
 function StatsContextProvider({ children }) {
 
     // Timer for Timed mode
-    const [ timeLeft, setTimeLeft ] = useState(60);
+    const [ timeLeft, setTimeLeft ] = useState(0);
     const [ isTimerRunning, setIsTimerRunning ] = useState(false);
     const throughCountdown = useRef(false);
     const timerRef = useRef(null);
@@ -18,7 +18,6 @@ function StatsContextProvider({ children }) {
 
         setIsTimerRunning(true);
         throughCountdown.current = true;
-        console.log(selectedMode)
 
         timerRef.current = setInterval(() => {
             setTimeLeft(prev => {
@@ -40,27 +39,64 @@ function StatsContextProvider({ children }) {
 
 
 
+    // Timer for Passage Mode
+    const passageTimerRef = useRef(null);
+    const isTestDone = useRef(false);
+
+    function startPassageTimer() {
+        if(isTimerRunning || !(selectedMode === "Passage")) return;
+
+        setIsTimerRunning(true);
+        throughCountdown.current = true;
+
+        passageTimerRef.current = setInterval(() => {
+            setTimeLeft(prev => {
+                if(isTestDone.current) {
+                    clearInterval(passageTimerRef.current);
+                    setIsTimerRunning(false);
+                }
+                return prev + 1;
+            })
+        }, 1000)
+    }
+
+    useEffect(() => {
+        return () => clearInterval(passageTimerRef.current)
+    }, [])
+    // Timer for Passage Mode
+
+
+
     // Accuracy & WPM
     const [ testLength, setTestLength ] = useState(Number(localStorage.getItem("testLength")) || 0);
     const [ resetFlag, setResetFlag ] = useState(false);
     const [ totalTypedChars, setTotalTypedChars ] = useState(0);
     const [ totalCorrectChars, setTotalCorrectChars ] = useState(0);
     const [ totalIncorrectChars, setTotalIncorrectChars ] = useState(0);
-    const TIME_LIMIT = 60;
+    const TIME_LIMIT = useRef(0);
+
+    useEffect(() => {
+        if(selectedMode === "Timed (60s)") {
+            TIME_LIMIT.current = 60;
+        } else if(selectedMode === "Timed (30s)") {
+            TIME_LIMIT.current = 30;
+        } else if(selectedMode === "Timed (15s)") {
+            TIME_LIMIT.current = 15;
+        }
+    }, [selectedMode])
 
     function getAccuracy() {
         return (totalCorrectChars / totalTypedChars) * 100;
     }
 
     function getWPM() {
-        const timeElapsed = TIME_LIMIT - timeLeft;
+        const timeElapsed = TIME_LIMIT.current - timeLeft;
         if (timeElapsed === 0) return 0;
         
         const netChars = totalCorrectChars - totalIncorrectChars;
         const wpm = (netChars / 5) / (timeElapsed / 60);
-        
-        const accuracyIntegrated = wpm * (getAccuracy() / 100)
-        return Math.max(0, Math.round(accuracyIntegrated));
+
+        return Math.max(0, Math.round(wpm));
     };
 
     const modeBasedTime = useCallback(() => {
@@ -77,16 +113,17 @@ function StatsContextProvider({ children }) {
 
     const resetTest = useCallback(() => {
         clearInterval(timerRef.current);
+        clearInterval(passageTimerRef.current)
         setIsTimerRunning(false);
         setResetFlag(true);
         modeBasedTime();
-    }, [modeBasedTime])
+    }, [setResetFlag, modeBasedTime])
 
     const resetChars = useCallback(() => {
         setTotalCorrectChars(0);
         setTotalTypedChars(0);
         setTotalIncorrectChars(0);
-    }, [])
+    }, [setTotalCorrectChars, setTotalTypedChars])
     // Accuracy & WPM
 
 
@@ -104,7 +141,7 @@ function StatsContextProvider({ children }) {
         setCurrentWPM(getWPM());
         setCurrentCorrectChars(totalCorrectChars);
         localStorage.setItem("highScore", bestScore.toString());
-        localStorage.setItem("accuracy", accuracy.toString());
+        localStorage.setItem("accuracy", getAccuracy().toString());
         localStorage.setItem("currentWPM", getWPM().toString());
         localStorage.setItem("currentCorrect", totalCorrectChars.toString());
     }
@@ -124,6 +161,8 @@ function StatsContextProvider({ children }) {
             setTestLength,
             throughCountdown,
             modeBasedTime,
+            startPassageTimer,
+            isTestDone,
 
             // typing stats
             setTotalTypedChars,
