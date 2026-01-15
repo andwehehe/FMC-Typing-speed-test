@@ -32,9 +32,7 @@ function StatsContextProvider({ children }) {
         }, 1000)
     }
 
-    useEffect(() => {
-        return () => clearInterval(timerRef.current)
-    }, [])
+    useEffect(() => {return () => clearInterval(timerRef.current)}, [])
     // Timer for Timed Mode
 
 
@@ -47,7 +45,6 @@ function StatsContextProvider({ children }) {
         if(isTimerRunning || !(selectedMode === "Passage")) return;
 
         setIsTimerRunning(true);
-        throughCountdown.current = true;
 
         passageTimerRef.current = setInterval(() => {
             setTimeLeft(prev => {
@@ -60,9 +57,7 @@ function StatsContextProvider({ children }) {
         }, 1000)
     }
 
-    useEffect(() => {
-        return () => clearInterval(passageTimerRef.current)
-    }, [])
+    useEffect(() => {return () => clearInterval(passageTimerRef.current) }, [])
     // Timer for Passage Mode
 
 
@@ -135,7 +130,7 @@ function StatsContextProvider({ children }) {
     const [ currentWPM, setCurrentWPM ] = useState(Number(localStorage.getItem("currentWPM") || 0));
     const [ currentCorrectChars, setCurrentCorrectChars ] = useState(Number(localStorage.getItem("currentCorrect") || 0));
 
-    function setNewBestScore() {
+    function setNewScore() {
         setBestScore(Math.max(getWPM(), bestScore));
         setAccuracy(getAccuracy());
         setCurrentWPM(getWPM());
@@ -151,46 +146,47 @@ function StatsContextProvider({ children }) {
     return (
         <StatsContext.Provider
             value={{
-            // timer
-            timeLeft,
-            setTimeLeft,
-            isTimerRunning,
-            setIsTimerRunning,
-            startTimer,
-            testLength,
-            setTestLength,
-            throughCountdown,
-            modeBasedTime,
-            startPassageTimer,
-            isPassageTestDone,
+                // ----- TIMER -----
+                timeLeft,
+                setTimeLeft,
+                isTimerRunning,
+                setIsTimerRunning,
+                throughCountdown,
+                startTimer,
+                startPassageTimer,
+                isPassageTestDone,
+                modeBasedTime,
+                testLength,
+                setTestLength,
 
-            // typing stats
-            setTotalTypedChars,
-            totalCorrectChars,
-            totalIncorrectChars,
-            currentCorrectChars,
-            setTotalCorrectChars,
-            setTotalIncorrectChars,
-            getAccuracy,
-            accuracy,
+                // ----- TYPING STATS -----
+                totalTypedChars,
+                setTotalTypedChars,
+                totalCorrectChars,
+                setTotalCorrectChars,
+                totalIncorrectChars,
+                setTotalIncorrectChars,
+                currentCorrectChars,
+                getAccuracy,
+                accuracy,
 
-            // wpm
-            getWPM,
-            currentWPM,
+                // ----- WPM -----
+                getWPM,
+                currentWPM,
 
-            // score
-            setNewBestScore,
-            bestScore,
+                // ----- SCORE -----
+                bestScore,
+                setNewScore,
 
-            // game state
-            isFirstGame,
-            setIsFirstGame,
-            resetFlag,
-            setResetFlag,
+                // ----- GAME STATE -----
+                isFirstGame,
+                setIsFirstGame,
+                resetFlag,
+                setResetFlag,
 
-            // actions / resets
-            resetTest,
-            resetChars,
+                // ----- ACTIONS / RESETS -----
+                resetTest,
+                resetChars,
             }}
         >
             {children}

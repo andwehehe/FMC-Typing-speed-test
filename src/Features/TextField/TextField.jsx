@@ -7,7 +7,6 @@ import { ModeContext } from '../StatsField/ModeContext';
 import { useNavigate } from 'react-router-dom';
 
 function TextField() {
-  
     // JSON data
     const { easy, medium, hard } = WORD_POOL;
 
@@ -44,7 +43,7 @@ function TextField() {
 
         // score
         bestScore,
-        setNewBestScore,
+        setNewScore,
 
         // game state / resets
         resetTest,
@@ -154,14 +153,22 @@ function TextField() {
         setHasIncorrect(false);
         resetTest();
         resetChars();
-        throughCountdown.current = false;
         modeBasedTime();
-    }, [getDifficulty, resetTest, resetChars, selectedMode, setTimeLeft, throughCountdown, modeBasedTime])
+        throughCountdown.current = false;
+        isPassageTestDone.current = false;
+    }, [
+        getDifficulty, 
+        resetTest, 
+        resetChars, 
+        selectedMode, 
+        setTimeLeft, 
+        throughCountdown, 
+        modeBasedTime, 
+        isPassageTestDone,
+    ])
 
     // Autofocus to input after mount
-    useEffect(() => {
-        inputRef.current.focus();
-    }, [])
+    useEffect(() => {inputRef.current.focus()}, [])
 
     // Update best score after timer drops to zero or if the test is done   
     useEffect(() => {
@@ -171,34 +178,51 @@ function TextField() {
 
         if(selectedMode === "Passage") {
             if(!isPassageTestDone.current) return;
-        } 
-
-        if((timeLeft <= 0 || totalCorrectChars === test.length) && throughCountdown.current) {
+        } else {
+           if(!throughCountdown.current) return;
+        }
+        
+        if((timeLeft <= 0 || totalCorrectChars === test.length)) {
+            // save test lenght for stats
             setTestLength(test.length)
             localStorage.setItem("testLength", test.length.toString());
-            setTimeLeft(60);
-            setNewBestScore();
-            setRandomLevel(() => 
-                Math.floor(Math.random() * getDifficulty(easy, medium, hard).length)
-            );
+
+            // calculate new scores for post test stats
+            setNewScore();
+
+            // reset time based on mode
+            modeBasedTime();
+
+            // always set to false post test
+            isPassageTestDone.current = false;
+
+            // generate random level for the next test
+            setTimeout(() => {
+                setRandomLevel(() => {
+                    Math.floor(Math.random() * getDifficulty(easy, medium, hard).length)
+                })
+            }, 1000);
+
+            // navigate to the score page
             NAVIGATE_TO_POSTTEST("Initial-High-Score");
-        }
+        }        
     }, [
         timeLeft, 
         setTimeLeft, 
-        setNewBestScore, 
+        setNewScore, 
         bestScore, 
         totalCorrectChars, 
         test, 
-        easy, 
-        medium, 
-        hard, 
-        getDifficulty, 
         NAVIGATE_TO_POSTTEST, 
         setTestLength,
         selectedMode,
         throughCountdown,
-        isPassageTestDone
+        isPassageTestDone,
+        modeBasedTime,
+        easy,
+        medium,
+        hard,
+        getDifficulty
     ])
 
     return(
