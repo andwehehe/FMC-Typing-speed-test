@@ -40,6 +40,7 @@ function StatsContextProvider({ children }) {
     // Timer for Passage Mode
     const passageTimerRef = useRef(null);
     const isPassageTestDone = useRef(false);
+    const [ timeConsumed, setTimeConsumed ] = useState(localStorage.getItem("timeConsumed") || 0);
 
     function startPassageTimer() {
         if(isTimerRunning || !(selectedMode === "Passage")) return;
@@ -59,6 +60,15 @@ function StatsContextProvider({ children }) {
 
     useEffect(() => {return () => clearInterval(passageTimerRef.current) }, [])
     // Timer for Passage Mode
+
+
+
+    // Time formatting
+    function formattedTime(time) {
+        const minutes = Math.floor(time / 60);
+        const seconds = time % 60;
+        return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+    }
 
 
 
@@ -85,14 +95,29 @@ function StatsContextProvider({ children }) {
     }
 
     function getWPM() {
-        const timeElapsed = TIME_LIMIT.current - timeLeft;
-        if (timeElapsed === 0) return 0;
-        
-        const netChars = totalCorrectChars - totalIncorrectChars;
-        const wpm = (netChars / 5) / (timeElapsed / 60);
+        let timeElapsed;
+        let netChars;
+        let wpm;
+
+        const WPM_CALC_DELAY = 1;
+
+        if (selectedMode === "Passage") {
+            timeElapsed = timeLeft;
+            if (timeElapsed < WPM_CALC_DELAY) return 0;
+
+            netChars = totalCorrectChars;
+        } else {
+            timeElapsed = TIME_LIMIT.current - timeLeft;
+            if (timeElapsed < WPM_CALC_DELAY) return 0;
+
+            netChars = totalCorrectChars - totalIncorrectChars;
+        }
+
+        wpm = (netChars / 5) / (timeElapsed / 60);
 
         return Math.max(0, Math.round(wpm));
-    };
+    }
+
 
     const modeBasedTime = useCallback(() => {
         if(selectedMode === "Passage") {
@@ -129,7 +154,9 @@ function StatsContextProvider({ children }) {
     const [ accuracy, setAccuracy ] = useState(Number(localStorage.getItem("accuracy")) || 0)
     const [ currentWPM, setCurrentWPM ] = useState(Number(localStorage.getItem("currentWPM") || 0));
     const [ currentCorrectChars, setCurrentCorrectChars ] = useState(Number(localStorage.getItem("currentCorrect") || 0));
-
+    // localStorage.setItem("highScore", "0");
+    // localStorage.setItem("isFirstGame", "true");
+    // console.log(localStorage.getItem("isFirstGame"))
     function setNewScore() {
         setBestScore(Math.max(getWPM(), bestScore));
         setAccuracy(getAccuracy());
@@ -154,6 +181,9 @@ function StatsContextProvider({ children }) {
                 throughCountdown,
                 startTimer,
                 startPassageTimer,
+                timeConsumed,
+                setTimeConsumed,
+                formattedTime,
                 isPassageTestDone,
                 modeBasedTime,
                 testLength,

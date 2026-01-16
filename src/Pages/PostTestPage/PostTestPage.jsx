@@ -7,6 +7,7 @@ import confetti from '../../assets/icons/pattern-confetti.svg';
 import newBest from '../../assets/icons/icon-new-pb.svg';
 import PlayAgain from '../../Components/PlayAgainBTN/PlayAgain';
 import { StatsContext } from '../../Features/TextField/StatsContext';
+import { ModeContext } from '../../Features/StatsField/ModeContext';
 import { useContext } from 'react';
 
 
@@ -18,8 +19,12 @@ function InitialHighscore() {
         testLength,
         currentCorrectChars, 
         bestScore,
-        isFirstGame
+        isFirstGame,
+        formattedTime,
+        timeConsumed
     } = useContext(StatsContext);
+
+    const { selectedMode } = useContext(ModeContext);
 
     const BASE__SCORE = {
         title: "Baseline Established!",
@@ -54,7 +59,11 @@ function InitialHighscore() {
                 <div className={styles.iconsContainer}>
                     <img 
                         src={star2} 
-                        style={{display: currentWPM < bestScore ? "block" : "none"}}
+                        style={{
+                            display: isFirstGame === "true" 
+                            || currentWPM < bestScore 
+                            ? "block" : "none"
+                        }}
                         alt="star" 
                         className={styles.star2}
                     />
@@ -105,17 +114,27 @@ function InitialHighscore() {
 
                 <div className={styles.final__accuracy}>
                     <p className={styles.category}>Accuracy:</p>
-                    <p className={`${styles.score} ${styles[accuracy === 100 ? "perfect" : "not__perfect"]}`}>
+                    <p className={`${styles.score} ${styles[Math.ceil(accuracy) === 100 ? "perfect" : "not__perfect"]}`}>
                         {Math.ceil(accuracy)}%
                     </p>
                 </div>
 
                 <div className={styles.final__character}>
-                    <p className={styles.category}>Characters</p>
+                    <p className={styles.category}>Characters:</p>
                     <p className={styles.score}>
                         <span className={styles.totalCorrect}>{currentCorrectChars}</span>
                         / 
                         <span className={styles.totalIncorrect}>{testLength - currentCorrectChars}</span>
+                    </p>
+                </div>
+
+                <div 
+                    className={styles.final__timeConsumed}
+                    style={{display: selectedMode === "Passage" ? "flex" : "none"}}
+                >
+                    <p className={styles.category}>Time:</p>
+                    <p className={styles.score}>
+                        {formattedTime(timeConsumed)}
                     </p>
                 </div>
 
@@ -124,13 +143,21 @@ function InitialHighscore() {
             <PlayAgain prompt={currentWPM <= bestScore ? TEST__COMPLETE.button : BASE__SCORE.button} />
             <img 
                 className={styles.star1} 
-                style={{display: currentWPM < bestScore ? "block" : "none"}}
+                style={{
+                    display: isFirstGame === "true" 
+                    || currentWPM < bestScore 
+                    ? "block" : "none"
+                }}
                 src={star1} 
                 alt="star 1" 
             />
             <div 
                 className={styles.confettiContainer} 
-                style={{display: currentWPM < bestScore ? "none" : "block"}}
+                style={{
+                    display: isFirstGame === "true" 
+                    || currentWPM < bestScore 
+                    ? "none" : "block"
+                }}
             > 
                 <img 
                     className={styles.confetti} 

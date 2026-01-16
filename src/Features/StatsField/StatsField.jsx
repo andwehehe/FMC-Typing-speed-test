@@ -6,7 +6,7 @@ import { StatsContext } from '../TextField/StatsContext'
 
 function StatsField() {
 
-  const { timeLeft } = useContext(StatsContext);
+  const { timeLeft, formattedTime } = useContext(StatsContext);
   const { getAccuracy, getWPM } = useContext(StatsContext)
 
   const DIFFICULTY_DROPDOWN = [
@@ -68,7 +68,7 @@ function StatsField() {
             <div className={styles.stats__category}>
                 Time:
                 <span className={styles.realTime__timer}>
-                  {timeLeft === 60 ? 1 : 0}:{timeLeft < 10 && 0}{timeLeft < 60 ? timeLeft : "00"}
+                  {formattedTime(timeLeft)}
                 </span>
             </div>
         </div>

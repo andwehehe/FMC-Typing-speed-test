@@ -12,8 +12,11 @@ function PlayAgain({ prompt }) {
     function handleClick() {
         NAVIGATE_TO_MAIN("/FMC-Typing-speed-test/");
         resetChars();
-        setIsFirstGame("false");
-        localStorage.setItem("isFirstGame", "false");
+        // 1 sec delay for confetti bug
+        setTimeout(() => {
+            setIsFirstGame("false");
+            localStorage.setItem("isFirstGame", "false");
+        }, 1000)
     }
 
     return(

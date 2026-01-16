@@ -34,6 +34,7 @@ function TextField() {
         modeBasedTime,
         startPassageTimer,
         isPassageTestDone,
+        setTimeConsumed,
 
         // typing stats
         setTotalTypedChars,
@@ -60,6 +61,7 @@ function TextField() {
     let correctCharsCounter = 0;
     let incorrectCharsCounter = 0
     const NAVIGATE_TO_POSTTEST = useNavigate();
+    const hasNavigatedRef = useRef(false);
 
     // Handle input changes (correct input, incorrect input, etc.)
     function handleChange(e) {
@@ -129,6 +131,7 @@ function TextField() {
                 startTimer();
                 
             }
+            if(inputRef.current === null) return;
             inputRef.current.focus();
         };
 
@@ -172,6 +175,9 @@ function TextField() {
 
     // Update best score after timer drops to zero or if the test is done   
     useEffect(() => {
+        // this avoid navigating to the score page twice
+        if(hasNavigatedRef.current) return;
+
         if(totalCorrectChars === test.length) {
             isPassageTestDone.current = true;
         }
@@ -182,7 +188,9 @@ function TextField() {
            if(!throughCountdown.current) return;
         }
         
-        if((timeLeft <= 0 || totalCorrectChars === test.length)) {
+        if(timeLeft <= 0 || totalCorrectChars === test.length) {
+            hasNavigatedRef.current = true;
+
             // save test lenght for stats
             setTestLength(test.length)
             localStorage.setItem("testLength", test.length.toString());
@@ -190,11 +198,12 @@ function TextField() {
             // calculate new scores for post test stats
             setNewScore();
 
+            // set time consumed for passage mode stats
+            setTimeConsumed(timeLeft);
+            localStorage.setItem("timeConsumed", timeLeft);
+
             // reset time based on mode
             modeBasedTime();
-
-            // always set to false post test
-            isPassageTestDone.current = false;
 
             // generate random level for the next test
             setTimeout(() => {
@@ -204,7 +213,7 @@ function TextField() {
             }, 1000);
 
             // navigate to the score page
-            NAVIGATE_TO_POSTTEST("Initial-High-Score");
+            NAVIGATE_TO_POSTTEST("Your-Score");
         }        
     }, [
         timeLeft, 
@@ -222,7 +231,8 @@ function TextField() {
         easy,
         medium,
         hard,
-        getDifficulty
+        getDifficulty,
+        setTimeConsumed
     ])
 
     return(

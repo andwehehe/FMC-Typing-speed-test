@@ -16,7 +16,7 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    path: '/FMC-Typing-speed-test/Initial-High-Score',
+    path: '/FMC-Typing-speed-test/Your-Score',
     element: <PostTestPage />,
     errorElement: <ErrorPage />,
   },
