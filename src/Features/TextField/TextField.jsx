@@ -95,21 +95,11 @@ function TextField() {
         } else if(e.key === "Backspace") {
             setTotalTypedChars(prev => prev - 1);
         }
-        
-        if(!isTimerRunning && inputValue.length === 0) {
-            if (
-                e.key === "Shift" || 
-                e.key === "Control" || 
-                e.key === "Alt" || 
-                e.key === "Meta" ||
-                e.key === "CapsLock" ||
-                e.key === "Tab" ||
-                e.key === "Escape"
-            ) {
-                return;
-            }
-            startTimer();
-        }
+
+        // Prevents cursor from going left or right
+        if(e.key === "ArrowRight" || e.key === "ArrowLeft") {
+            e.preventDefault();
+        };
     }
 
     // Autofocus to input when a key is pressed
