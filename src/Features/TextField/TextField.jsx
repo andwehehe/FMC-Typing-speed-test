@@ -54,12 +54,11 @@ function TextField() {
     } = useContext(StatsContext);
 
     const inputRef = useRef();
+    const textRef = useRef(null);
     const [ hasIncorrect, setHasIncorrect ] = useState(false);
     const [ inputValue, setInputValue ] = useState("");
     const words = test.split(" ");
     let globalIndex = 0;
-    let correctCharsCounter = 0;
-    let incorrectCharsCounter = 0
     const NAVIGATE_TO_POSTTEST = useNavigate();
     const hasNavigatedRef = useRef(false);
 
@@ -68,20 +67,30 @@ function TextField() {
         if(e.target.value.length > test.length) return;
         
         const newValue = e.target.value;
+        const previousLength = inputValue.length;
         setInputValue(newValue);
-        setTotalTypedChars(prev => prev + 1);
         
-        [...newValue].forEach((char, index) => {
-            if(char === test[index]) {
-                correctCharsCounter++;
+        if(newValue.length > previousLength) {
+            // Character added
+            setTotalTypedChars(prev => prev + 1);
+
+            const newCharIndex = newValue.length - 1;
+            if(newValue[newCharIndex] === test[newCharIndex]) {
+                setTotalCorrectChars(prev => prev + 1);
             } else {
-                incorrectCharsCounter++;
+                setTotalIncorrectChars(prev => prev + 1);
             }
-        })
-
-        setTotalCorrectChars(correctCharsCounter);
-        setTotalIncorrectChars(incorrectCharsCounter);
-
+        } else if(newValue.length < previousLength) {
+            // Character removed
+            const removedCharIndex = previousLength - 1;
+            if(inputValue[removedCharIndex] === test[removedCharIndex]) {
+                // Deleted a CORRECT character - subtract from both
+                setTotalCorrectChars(prev => prev - 1);
+                setTotalTypedChars(prev => prev - 1);
+            }
+        }
+        
+        // Check for incorrect characters
         const foundIncorrect = [...newValue].some((char, index) => {
             return char !== test[index]
         })
@@ -90,10 +99,11 @@ function TextField() {
 
     // Handle input keydown (Backspace rule)
     function handleKeyDown(e) {
-        if(e.key === "Backspace" && !hasIncorrect) {
-            e.preventDefault();
-        } else if(e.key === "Backspace") {
-            setTotalTypedChars(prev => prev - 1);
+        if (e.key === "Backspace") {
+            if (!hasIncorrect) {
+                e.preventDefault();
+                return;
+            }
         }
 
         // Prevents cursor from going left or right
@@ -106,20 +116,11 @@ function TextField() {
     useEffect(() => {
         const handleGlobalKeydown = (e) => {
             if(!isTimerRunning && inputValue.length === 0) {
-                if (
-                    e.key === "Shift" || 
-                    e.key === "Control" || 
-                    e.key === "Alt" || 
-                    e.key === "Meta" ||
-                    e.key === "CapsLock" ||
-                    e.key === "Tab" ||
-                    e.key === "Escape"
-                ) {
+                if (e.key !== test[0]) {
                     return;
                 }
                 startPassageTimer();    
                 startTimer();
-                
             }
             if(inputRef.current === null) return;
             inputRef.current.focus();
@@ -130,7 +131,7 @@ function TextField() {
         return() => {
             window.removeEventListener("keydown", handleGlobalKeydown);
         }
-    }, [isTimerRunning, inputValue, startTimer, startPassageTimer])
+    }, [isTimerRunning, inputValue, startTimer, startPassageTimer, test])
 
     // Reset input when the restart button is clicked
     useEffect(() => {
@@ -203,7 +204,7 @@ function TextField() {
             }, 1000);
 
             // navigate to the score page
-            NAVIGATE_TO_POSTTEST("Your-Score");
+            NAVIGATE_TO_POSTTEST("Score");
         }        
     }, [
         timeLeft, 
@@ -240,7 +241,7 @@ function TextField() {
                 autoCapitalize="off"
                 autoComplete="off"
             />
-            <div className={styles.text}>
+            <div className={styles.text} ref={textRef}>
                 {
                     words.map((word, wordIndex) => (
                         <div className={styles.word} key={wordIndex}>
@@ -269,6 +270,7 @@ function TextField() {
                                     return(
                                         <span
                                             key={`${wordIndex}-${charIndex}`}
+                                            data-cursor={fakeCursor ? "true" : undefined}
                                             className={`${styles[className]} ${styles[fakeCursor]}`}
                                         >
                                             {char}

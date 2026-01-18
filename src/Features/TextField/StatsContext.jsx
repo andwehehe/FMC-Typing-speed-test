@@ -69,6 +69,7 @@ function StatsContextProvider({ children }) {
         const seconds = time % 60;
         return `${minutes}:${seconds.toString().padStart(2, "0")}`;
     }
+    // Time formatting
 
 
 
@@ -79,7 +80,6 @@ function StatsContextProvider({ children }) {
     const [ totalCorrectChars, setTotalCorrectChars ] = useState(0);
     const [ totalIncorrectChars, setTotalIncorrectChars ] = useState(0);
     const TIME_LIMIT = useRef(0);
-
     useEffect(() => {
         if(selectedMode === "Timed (60s)") {
             TIME_LIMIT.current = 60;
