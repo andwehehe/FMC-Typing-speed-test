@@ -50,33 +50,36 @@ function StatsField() {
         <BestScorePanel />
 
         {/* Real-time Stats */}
-        <div className={styles.realTime__stats}>
-            <div className={styles.stats__category}>
-                WPM:
-                <span className={styles.realTime__WPM}>{Math.ceil(getWPM()) || 0}</span>
-            </div>
+        <div className={styles.statsContainer}>
+          <div className={styles.realTime__stats}>
+              <div className={styles.stats__category}>
+                  WPM:
+                  <span className={styles.realTime__WPM}>{Math.ceil(getWPM()) || 0}</span>
+              </div>
 
-            <hr />
+              <hr />
 
-            <div className={styles.stats__category}>
-                Accuracy:
-                <span className={styles.realTime__accuracy}>{getAccuracy() ? Math.ceil(getAccuracy()) : 100}%</span>
-            </div>
+              <div className={styles.stats__category}>
+                  Accuracy:
+                  <span className={styles.realTime__accuracy}>{getAccuracy() ? Math.ceil(getAccuracy()) : 100}%</span>
+              </div>
 
-            <hr />
+              <hr />
 
-            <div className={styles.stats__category}>
-                Time:
-                <span className={styles.realTime__timer}>
-                  {formattedTime(timeLeft)}
-                </span>
-            </div>
-        </div>
+              <div className={styles.stats__category}>
+                  Time:
+                  <span className={styles.realTime__timer}>
+                    {formattedTime(timeLeft)}
+                  </span>
+              </div>
+          </div>
 
-        {/* Game Settings */}
-        <div className={styles.game__settings}>
-            <DropdownBTN content={DIFFICULTY_DROPDOWN}/>
-            <DropdownBTN content={GAME_MODE}/>
+          {/* Game Settings */}
+          <div className={styles.game__settings}>
+              <DropdownBTN content={DIFFICULTY_DROPDOWN}/>
+              <hr />
+              <DropdownBTN content={GAME_MODE}/>
+          </div>
         </div>
 
     </section>

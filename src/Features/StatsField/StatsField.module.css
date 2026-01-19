@@ -8,6 +8,13 @@
 }
 
 /* REAL-TIME STATS */
+.statsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+}
+
 .realTime__stats {
     display: flex;
     justify-content: center;
@@ -57,4 +64,50 @@
     display: flex;
     justify-content: space-between;
     gap: 0.7rem;
+}
+
+.game__settings hr {
+    display: none;
+}
+
+
+@media (min-width: 768px) {
+    .statsContainer {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .stats__category {
+        font-size: 1.2rem;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .realTime__stats hr {
+        height: 1.5rem;
+    }
+
+     .realTime__stats {
+        justify-content: flex-start;
+        width: max-content;
+    }
+
+    .realTime__stats > * {
+        width: max-content;
+    }   
+
+    .game__settings {
+        align-items: center;
+        width: max-content;
+    }
+
+    .game__settings hr {
+        display: block;
+        height: 2rem;
+        border: none;
+        border-left: solid 0.15rem var(--neutral-800);
+    }
 }

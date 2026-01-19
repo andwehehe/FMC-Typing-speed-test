@@ -16,6 +16,7 @@
     justify-content: center;
     align-items: center;
     gap: 0.5rem;
+    cursor: pointer;
 }
 
 .dropdown__options {
@@ -36,8 +37,10 @@
     border-bottom: solid 0.1rem transparent;
 }
 
-.option {
+.option, .option_single {
+    list-style: none;
     padding: 0.5rem;
+    cursor: pointer;
 }
 
 .option label {
@@ -52,7 +55,9 @@
 }
 
 input[name="difficulty"],
-input[name="mode"] {
+input[name="mode"],
+input[name="difficulty_single"],
+input[name="mode_single"] {
     display: none;
 }
 
@@ -61,4 +66,55 @@ input[name="mode"] {
     aspect-ratio: 1 / 1;
     border: solid 0.1rem var(--neutral-0);
     border-radius: 50%;
+}
+
+label  {
+    cursor: pointer;
+}
+
+
+
+/* Single BTN */
+.singleBTN__container {
+    display: none;
+}
+
+.dropdown__options_single {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.settings_label {
+    color: var(--neutral-500);
+    font-weight: var(--fw-semibold);
+    display: flex;
+    align-items: center;
+    margin-right: 0.5rem;
+}
+
+.option_single:has(input[type="radio"]:checked) {
+    color: var(--blue-400);
+    border-color: var(--blue-400);
+}
+
+.option_single:has(input[type="radio"]:focus) {
+    outline: solid 0.5rem var(--blue-400);
+    background-color: red;
+}
+
+.option_single {
+    color: var(--neutral-0);
+    border: solid var(--neutral-500) 0.05rem;
+    border-radius: 0.5rem;
+    width: max-content;
+}
+
+@media (min-width: 768px) {
+    .singleBTN__container {
+        display: flex;
+    }
+
+    .dropdownBTN__container {
+        display: none;
+    }
 }
