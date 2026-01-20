@@ -73,7 +73,6 @@
 
 @media (min-width: 768px) {
     .statsContainer {
-        flex-direction: row;
         align-items: center;
         justify-content: space-between;
     }
@@ -100,8 +99,9 @@
     }   
 
     .game__settings {
+        width: 100%;
+        justify-content: space-around;
         align-items: center;
-        width: max-content;
     }
 
     .game__settings hr {
@@ -109,5 +109,15 @@
         height: 2rem;
         border: none;
         border-left: solid 0.15rem var(--neutral-800);
+    }
+}
+
+@media (min-width: 1425px) {
+    .statsContainer {
+        flex-direction: row;
+    }
+
+    .game__settings {
+        width: max-content;
     }
 }
