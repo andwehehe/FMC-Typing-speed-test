@@ -21,6 +21,7 @@
 
 .dropdown__options {
     position: absolute;
+    z-index: 1;
     top: 100%;
     display: none; 
     margin-block-start: 0.5rem;
@@ -107,6 +108,11 @@ label  {
     border: solid var(--neutral-500) 0.05rem;
     border-radius: 0.5rem;
     width: max-content;
+}
+
+.option_single:hover {
+    border-color: var(--blue-400);
+    color: var(--blue-400);
 }
 
 @media (min-width: 768px) {

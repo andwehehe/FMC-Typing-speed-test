@@ -1,5 +1,5 @@
 import styles from './TextField.module.css'
-import WORD_POOL from './data.json'
+import WORD_POOL from './data.json';
 import { useState, useContext, useEffect, useRef } from 'react';
 import { StatsContext } from './StatsContext';
 import { DifficultyContext } from '../StatsField/DifficultyContext';
@@ -55,6 +55,7 @@ function TextField() {
 
     const inputRef = useRef();
     const textRef = useRef(null);
+    const [ isAllowedToStart, setIsAllowedToStart ] = useState(false);
     const [ hasIncorrect, setHasIncorrect ] = useState(false);
     const [ inputValue, setInputValue ] = useState("");
     const words = test.split(" ");
@@ -64,6 +65,16 @@ function TextField() {
 
     // Handle input changes (correct input, incorrect input, etc.)
     function handleChange(e) {
+        if(!isAllowedToStart) {
+            setIsAllowedToStart(true);
+            return;
+        }
+
+        if(e.target.value.length === 1 && e.target.value[0] !== test[0]) {
+            e.target.value === "";
+            return;
+        }
+
         if(e.target.value.length > test.length) return;
         
         const newValue = e.target.value;
@@ -205,6 +216,9 @@ function TextField() {
 
             // navigate to the score page
             NAVIGATE_TO_POSTTEST("Score");
+
+            // Show again the dialog
+            setIsAllowedToStart(false);
         }        
     }, [
         timeLeft, 
@@ -228,6 +242,19 @@ function TextField() {
 
     return(
         <section className={styles.text__field}>
+
+            {/* Start Test Overlay */}
+            <div 
+                className={styles.dialogBox}
+                style={{display: isAllowedToStart ? "none" : "flex"}}
+            >
+                <button onClick={() => setIsAllowedToStart(true)}>
+                    Start Typing Test
+                </button>
+                <p>Or click the text and start typing</p>
+            </div>
+
+            {/* Input */}
             <input 
                 type="text" 
                 className={styles.input} 
@@ -241,6 +268,8 @@ function TextField() {
                 autoCapitalize="off"
                 autoComplete="off"
             />
+
+            {/* Text Container */}
             <div className={styles.text} ref={textRef}>
                 {
                     words.map((word, wordIndex) => (
@@ -316,7 +345,7 @@ function TextField() {
                                         : "incorrect";
                                     }
 
-                                    if (spaceIndex === inputValue.length) {
+                                    if (spaceIndex === inputValue.length) { 
                                         fakeCursor = "fakeCursor";
                                     }
 
