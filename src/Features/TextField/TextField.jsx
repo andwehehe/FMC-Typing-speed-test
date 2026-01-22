@@ -240,134 +240,166 @@ function TextField() {
         setTimeConsumed
     ])
 
-    return(
-        <section className={styles.text__field}>
+    // Scroll up and down behavior
+    const container = textRef.current;
+    const scrollTopRef = useRef(0);
 
-            {/* Start Test Overlay */}
-            <div 
-                className={styles.dialogBox}
-                style={{display: isAllowedToStart ? "none" : "flex"}}
-            >
-                <button onClick={() => setIsAllowedToStart(true)}>
-                    Start Typing Test
-                </button>
-                <p>Or click the text and start typing</p>
-            </div>
+    useEffect(() => {
+        if (!textRef.current) return;
+        
+        const cursorElement = textRef.current.querySelector('[data-cursor="true"]');
+        if (cursorElement) {
+            const cursorTop = cursorElement.offsetTop;
+            const containerHeight = container.clientHeight;
+            
+            // Scroll down when cursor moves to next line
+            if (cursorTop > scrollTopRef.current + containerHeight - 100) {
+                container.scrollTop = scrollTopRef.current + 100;
+                scrollTopRef.current = scrollTopRef.current + 100;
+            } else if (cursorTop < scrollTopRef.current + 100) {
+                container.scrollTop = scrollTopRef.current - 100;
+                scrollTopRef.current = scrollTopRef.current - 100;
+            }
+        }
+    }, [inputValue, container]);
 
-            {/* Input */}
-            <input 
-                type="text" 
-                className={styles.input} 
-                onChange={handleChange} 
-                onKeyDown={handleKeyDown}
-                onPaste={e => e.preventDefault()} 
-                value={inputValue}
-                ref={inputRef}
-                spellCheck="false"
-                autoCorrect="off"
-                autoCapitalize="off"
-                autoComplete="off"
-            />
+    // Reset scroll when test restarts
+    useEffect(() => {
+        if (!resetFlag) return;
+        if (textRef.current) {
+            textRef.current.scrollTop = 0;
+            scrollTopRef.current = 0;
+        }
+    }, [resetFlag]);
 
-            {/* Text Container */}
-            <div className={styles.text} ref={textRef}>
-                {
-                    words.map((word, wordIndex) => (
-                        <div className={styles.word} key={wordIndex}>
+        return(
+            <section className={styles.text__field}>
 
-                            {/* SPLITTING WORDS INTO CHARS */}
-                            {
-                                word.split("").map((char, charIndex) => {
-                                    const currentCharIndex = globalIndex;
+                {/* Start Test Overlay */}
+                <div 
+                    className={styles.dialogBox}
+                    style={{display: isAllowedToStart ? "none" : "flex"}}
+                >
+                    <button onClick={() => setIsAllowedToStart(true)}>
+                        Start Typing Test
+                    </button>
+                    <p>Or click the text and start typing</p>
+                </div>
 
-                                    let className = "";
-                                    let fakeCursor = ""
+                {/* Input */}
+                <input 
+                    type="text" 
+                    className={styles.input} 
+                    onChange={handleChange} 
+                    onKeyDown={handleKeyDown}
+                    onPaste={e => e.preventDefault()} 
+                    value={inputValue}
+                    ref={inputRef}
+                    spellCheck="false"
+                    autoCorrect="off"
+                    autoCapitalize="off"
+                    autoComplete="off"
+                />
 
-                                    if (currentCharIndex < inputValue.length) {
-                                        className =
-                                            char === inputValue[currentCharIndex]
-                                            ? "correct"
-                                            : "incorrect";
-                                    }
+                {/* Text Container */}
+                <div className={styles.text} ref={textRef}>
+                    {
+                        words.map((word, wordIndex) => (
+                            <div className={styles.word} key={wordIndex}>
 
-                                    if (currentCharIndex === inputValue.length && currentCharIndex !== 0) {
-                                        fakeCursor = "fakeCursor";
-                                    }
+                                {/* SPLITTING WORDS INTO CHARS */}
+                                {
+                                    word.split("").map((char, charIndex) => {
+                                        const currentCharIndex = globalIndex;
 
-                                    globalIndex++;
+                                        let className = "";
+                                        let fakeCursor = ""
 
-                                    return(
-                                        <span
-                                            key={`${wordIndex}-${charIndex}`}
-                                            data-cursor={fakeCursor ? "true" : undefined}
-                                            className={`${styles[className]} ${styles[fakeCursor]}`}
-                                        >
-                                            {char}
-                                        </span>
-                                    );
-                                })
-                            }
+                                        if (currentCharIndex < inputValue.length) {
+                                            className =
+                                                char === inputValue[currentCharIndex]
+                                                ? "correct"
+                                                : "incorrect";
+                                        }
 
-                            {/* EXCESS ERROR */}
-                            {
-                                (() => {
-                                    const errors = []
+                                        if (currentCharIndex === inputValue.length && currentCharIndex !== 0) {
+                                            fakeCursor = "fakeCursor";
+                                        }
 
-                                    while(inputValue.length > globalIndex && inputValue[globalIndex] !== " ") {
-                                        let errorClass = "error";
-                                        let errorIndex = globalIndex;
-                                        globalIndex++
-                                        errors.push(
+                                        globalIndex++;
+
+                                        return(
                                             <span
-                                                key={`error-${errorIndex}`}
-                                                className={styles[errorClass]}
+                                                key={`${wordIndex}-${charIndex}`}
+                                                data-cursor={fakeCursor ? "true" : undefined}
+                                                className={`${styles[className]} ${styles[fakeCursor]}`}
                                             >
-                                                {inputValue[errorIndex]}
+                                                {char}
                                             </span>
                                         );
-                                    }
+                                    })
+                                }
 
-                                    return(errors)
-                                }) ()
-                            }
+                                {/* EXCESS ERROR */}
+                                {
+                                    (() => {
+                                        const errors = []
 
-                            {/* SPACE */}
-                            {
-                                (() => {
-                                    const spaceIndex = globalIndex;
-                                    let spaceClass = "";
-                                    let fakeCursor = ""
+                                        while(inputValue.length > globalIndex && inputValue[globalIndex] !== " ") {
+                                            let errorClass = "error";
+                                            let errorIndex = globalIndex;
+                                            globalIndex++
+                                            errors.push(
+                                                <span
+                                                    key={`error-${errorIndex}`}
+                                                    className={styles[errorClass]}
+                                                >
+                                                    {inputValue[errorIndex]}
+                                                </span>
+                                            );
+                                        }
 
-                                    if (spaceIndex < inputValue.length) {
-                                    spaceClass =
-                                        inputValue[spaceIndex] === " "
-                                        ? "correct"
-                                        : "incorrect";
-                                    }
+                                        return(errors)
+                                    }) ()
+                                }
 
-                                    if (spaceIndex === inputValue.length) { 
-                                        fakeCursor = "fakeCursor";
-                                    }
+                                {/* SPACE */}
+                                {
+                                    (() => {
+                                        const spaceIndex = globalIndex;
+                                        let spaceClass = "";
+                                        let fakeCursor = ""
 
-                                    globalIndex++;
+                                        if (spaceIndex < inputValue.length) {
+                                        spaceClass =
+                                            inputValue[spaceIndex] === " "
+                                            ? "correct"
+                                            : "incorrect";
+                                        }
 
-                                    return(
-                                        <span
-                                            key={`space-${wordIndex}`}
-                                            className={[styles[fakeCursor], styles[spaceClass]].filter(Boolean).join(" ")}
-                                        >
-                                            &nbsp;
-                                        </span>
-                                    );
-                                }) ()
-                            }
+                                        if (spaceIndex === inputValue.length) { 
+                                            fakeCursor = "fakeCursor";
+                                        }
 
-                        </div>
-                    ))
-                }
-            </div>
-        </section>
-    )
-}
+                                        globalIndex++;
+
+                                        return(
+                                            <span
+                                                key={`space-${wordIndex}`}
+                                                className={[styles[fakeCursor], styles[spaceClass]].filter(Boolean).join(" ")}
+                                            >
+                                                &nbsp;
+                                            </span>
+                                        );
+                                    }) ()
+                                }
+
+                            </div>
+                        ))
+                    }
+                </div>
+            </section>
+        )
+    }
 
 export default TextField
