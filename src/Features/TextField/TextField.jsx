@@ -252,13 +252,19 @@ function TextField() {
             const cursorTop = cursorElement.offsetTop;
             const containerHeight = container.clientHeight;
             
+            // Detect mobile (adjust breakpoint as needed)
+            const isMobile = window.innerWidth <= 768;
+            const scrollAmount = isMobile ? 50 : 80;
+            const triggerDistanceDown = isMobile ? 50 : 80;
+            const triggerDistanceUp = isMobile ? 200 : 150;
+            
             // Scroll down when cursor moves to next line
-            if (cursorTop > scrollTopRef.current + containerHeight - 100) {
-                container.scrollTop = scrollTopRef.current + 100;
-                scrollTopRef.current = scrollTopRef.current + 100;
-            } else if (cursorTop < scrollTopRef.current + 100) {
-                container.scrollTop = scrollTopRef.current - 100;
-                scrollTopRef.current = scrollTopRef.current - 100;
+            if (cursorTop > scrollTopRef.current + containerHeight - triggerDistanceDown) {
+                container.scrollTop = scrollTopRef.current + scrollAmount;
+                scrollTopRef.current = scrollTopRef.current + scrollAmount;
+            } else if (cursorTop < scrollTopRef.current + triggerDistanceUp) {
+                container.scrollTop = scrollTopRef.current - scrollAmount;
+                scrollTopRef.current = scrollTopRef.current - scrollAmount;
             }
         }
     }, [inputValue, container]);
