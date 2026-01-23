@@ -71,7 +71,7 @@
 }
 
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
     .statsContainer {
         align-items: center;
         justify-content: space-between;
@@ -112,7 +112,7 @@
     }
 }
 
-@media (min-width: 1425px) {
+@media (min-width: 89.0625rem) {
     .statsContainer {
         flex-direction: row;
     }

@@ -38,7 +38,7 @@ body {
   background-color: var(--neutral-900);
 }
 
-@media (min-width: 768px) {
+@media (min-width: 48rem) {
   body {
     margin-inline: auto;
     max-width: 85vw;
