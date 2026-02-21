@@ -3,6 +3,7 @@
     align-items: center;
     justify-content: center;
     color: var(--neutral-0);
+    letter-spacing: 2;
     text-align: center;
     height: 100vh;
 }
